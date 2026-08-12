@@ -41,7 +41,7 @@ function TechnicianVisits() {
               <Link
                 to="/technik/$visitId"
                 params={{ visitId: visit.id }}
-                className="block rounded-xl border border-border bg-card p-4 shadow-panel transition-colors active:bg-accent/50"
+                className="block rounded-xl border border-border/70 bg-card p-4 shadow-panel transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] active:translate-y-0 active:bg-accent/50"
               >
                 <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
                   <span className="flex shrink-0 items-center gap-1 rounded-md bg-secondary px-2 py-1 font-display text-sm font-semibold tabular-nums text-brand">

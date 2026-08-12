@@ -111,6 +111,85 @@ export const todayVisits: Visit[] = [
   },
 ];
 
+export type ReviewStatus = "overdue" | "upcoming" | "ok";
+
+export interface ClientOverview {
+  id: string;
+  clientName: string;
+  deviceModel: string;
+  deviceCategory: string;
+  lastReview: string;
+  nextReviewDue: string;
+  status: ReviewStatus;
+  /** Dni po terminie (tylko dla statusu "overdue"). */
+  overdueDays?: number;
+  /** Dni do terminu (tylko dla statusu "upcoming"). */
+  dueInDays?: number;
+}
+
+/** Ranga pilności do sortowania — im mniejsza, tym pilniejsze. */
+export const statusRank: Record<ReviewStatus, number> = { overdue: 0, upcoming: 1, ok: 2 };
+
+export const statusMeta: Record<ReviewStatus, { label: string; className: string }> = {
+  overdue: { label: "Zaległy", className: "bg-alert/15 text-alert border border-alert/30" },
+  upcoming: {
+    label: "Zbliża się",
+    className: "bg-[oklch(0.85_0.14_85)] text-[oklch(0.32_0.09_75)] border border-[oklch(0.7_0.14_80)]/40",
+  },
+  ok: { label: "Aktualny", className: "bg-success-soft text-success border border-success/25" },
+};
+
+export const clientsOverview: ClientOverview[] = [
+  {
+    id: "co-1",
+    clientName: "Anna Kowalska",
+    deviceModel: "Daikin Perfera 3,5 kW",
+    deviceCategory: "Klimatyzacja split",
+    lastReview: "2024-05-14",
+    nextReviewDue: "2025-07-31",
+    status: "overdue",
+    overdueDays: 12,
+  },
+  {
+    id: "co-2",
+    clientName: "Piotr Lewandowski",
+    deviceModel: "Mitsubishi MSZ-AP 2,5 kW",
+    deviceCategory: "Klimatyzacja split",
+    lastReview: "2024-08-02",
+    nextReviewDue: "2025-08-07",
+    status: "overdue",
+    overdueDays: 5,
+  },
+  {
+    id: "co-3",
+    clientName: "Biuro Rachunkowe Saldo",
+    deviceModel: "LG Multi V S 12 kW",
+    deviceCategory: "System multi-split",
+    lastReview: "2024-08-20",
+    nextReviewDue: "2025-08-18",
+    status: "upcoming",
+    dueInDays: 6,
+  },
+  {
+    id: "co-4",
+    clientName: "Katarzyna Wiśniewska",
+    deviceModel: "Panasonic Aquarea 9 kW",
+    deviceCategory: "Pompa ciepła",
+    lastReview: "2025-02-10",
+    nextReviewDue: "2026-02-12",
+    status: "ok",
+  },
+  {
+    id: "co-5",
+    clientName: "Tomasz Dąbrowski",
+    deviceModel: "Samsung Wind-Free 5,0 kW",
+    deviceCategory: "Klimatyzacja split",
+    lastReview: "2025-08-12",
+    nextReviewDue: "2026-08-12",
+    status: "ok",
+  },
+];
+
 export const serviceTypes: ServiceType[] = [
   "przegląd",
   "naprawa",
@@ -125,8 +204,8 @@ export const tenantConfig = {
   company: {
     name: "KlimaTech Serwis",
     tagline: "Panel Klienta",
-    // Wgraj logo do src/assets i ustaw ścieżkę, aby zastąpić wersję tekstową.
-    logoUrl: null as string | null,
+    // Podmień plik w public/ (lub wgraj nowy do src/assets) i zaktualizuj ścieżkę.
+    logoUrl: "/logo-klimatech.svg" as string | null,
     phone: "+48 22 000 12 34",
     email: "serwis@klimatech.pl",
   },

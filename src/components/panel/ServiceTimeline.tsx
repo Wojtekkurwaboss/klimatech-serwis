@@ -16,11 +16,11 @@ export function ServiceTimeline({ entries }: { entries: ServiceEntry[] }) {
         return (
           <li key={entry.id} className="relative flex gap-4">
             <span
-              className={`relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-background ${meta.className}`}
+              className={`relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full shadow-md ring-4 ring-background ${meta.className}`}
             >
               <meta.icon className="size-4" />
             </span>
-            <div className="flex-1 rounded-xl border border-border bg-card p-4 shadow-panel">
+            <div className="flex-1 rounded-xl border border-border/70 bg-card p-4 shadow-panel transition-shadow duration-300 hover:shadow-[var(--shadow-lift)]">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <p className="font-display text-sm font-semibold uppercase tracking-wide">

@@ -10,12 +10,16 @@ export function DeviceCard({ device }: { device: DeviceInfo }) {
   ];
 
   return (
-    <article className="overflow-hidden rounded-xl border border-border bg-card shadow-panel">
-      <header className="bg-brand px-5 py-4 text-brand-foreground sm:px-6">
-        <p className="font-display text-xs uppercase tracking-[0.18em] text-brand-foreground/70">
+    <article className="overflow-hidden rounded-xl border border-border/70 bg-card shadow-panel transition-shadow duration-300 hover:shadow-[var(--shadow-lift)]">
+      <header className="relative overflow-hidden bg-[image:var(--gradient-brand)] px-5 py-5 text-brand-foreground sm:px-6">
+        <Snowflake
+          aria-hidden
+          className="pointer-events-none absolute -right-3 -top-3 size-24 rotate-12 text-brand-foreground/10"
+        />
+        <p className="relative font-display text-xs uppercase tracking-[0.18em] text-brand-foreground/70">
           {device.category}
         </p>
-        <h2 className="font-display text-2xl font-semibold">{device.model}</h2>
+        <h2 className="relative font-display text-2xl font-semibold">{device.model}</h2>
       </header>
       <div className="divide-y divide-border">
         {rows.map((row) => (

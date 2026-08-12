@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -16,8 +16,10 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        alert: "bg-alert text-alert-foreground shadow-sm hover:bg-alert/90",
-        brand: "bg-brand text-brand-foreground shadow-sm hover:bg-brand-muted",
+        alert:
+          "bg-[image:linear-gradient(145deg,oklch(0.76_0.14_62),oklch(0.7_0.145_61))] text-alert-foreground shadow-md hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] active:translate-y-0",
+        brand:
+          "bg-[image:var(--gradient-brand)] text-brand-foreground shadow-md hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] active:translate-y-0",
         brandOutline:
           "border border-brand/25 bg-card text-brand shadow-sm hover:bg-accent",
       },

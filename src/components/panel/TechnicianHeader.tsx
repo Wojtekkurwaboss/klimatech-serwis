@@ -4,18 +4,24 @@ import { tenantConfig, technician } from "@/config/tenant";
 
 export function TechnicianHeader({ backTo }: { backTo?: string }) {
   return (
-    <header className="sticky top-0 z-20 bg-brand text-brand-foreground">
+    <header className="sticky top-0 z-20 bg-[image:var(--gradient-brand)] text-brand-foreground shadow-[var(--shadow-lift)]">
       <div className="mx-auto grid max-w-2xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
         {backTo ? (
           <Link
             to="/technik"
-            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-foreground/10"
+            className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-foreground/10 transition-colors hover:bg-brand-foreground/20"
             aria-label="Wróć do listy wizyt"
           >
             <ArrowLeft className="size-4" />
           </Link>
+        ) : tenantConfig.company.logoUrl ? (
+          <img
+            src={tenantConfig.company.logoUrl}
+            alt={tenantConfig.company.name}
+            className="size-9 shrink-0 rounded-lg"
+          />
         ) : (
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-foreground/10 font-display text-sm font-bold">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-foreground/10 font-display text-sm font-bold ring-1 ring-white/10">
             KT
           </span>
         )}

@@ -15,10 +15,10 @@ export function AlertBanner({
   return (
     <section
       role="alert"
-      className="rounded-xl border-l-4 border-alert bg-alert-soft p-5 shadow-panel sm:p-6"
+      className="rounded-xl border-l-[5px] border-alert bg-[image:linear-gradient(120deg,var(--alert-soft)_0%,oklch(0.97_0.02_60)_100%)] p-5 shadow-[var(--shadow-lift)] sm:p-6"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-alert text-alert-foreground">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-[image:linear-gradient(145deg,oklch(0.78_0.15_62),oklch(0.68_0.14_60))] text-alert-foreground shadow-md ring-1 ring-black/5">
           <AlertTriangle className="size-6" />
         </div>
         <div className="flex-1">

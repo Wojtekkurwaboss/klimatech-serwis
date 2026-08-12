@@ -34,13 +34,22 @@ function Index() {
     <div className="min-h-screen bg-background font-sans">
       <Toaster position="top-center" />
 
-      <header className="bg-brand text-brand-foreground">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <header className="relative overflow-hidden bg-[image:var(--gradient-brand)] text-brand-foreground shadow-[var(--shadow-lift)]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "20px 20px",
+          }}
+        />
+        <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
           <div className="flex items-center gap-3">
             {company.logoUrl ? (
               <img src={company.logoUrl} alt={company.name} className="h-9 w-auto" />
             ) : (
-              <span className="flex size-10 items-center justify-center rounded-md bg-brand-foreground/10 font-display text-lg font-bold">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-[image:linear-gradient(145deg,oklch(1_0_0/0.16),oklch(1_0_0/0.04))] font-display text-lg font-bold shadow-inner ring-1 ring-white/15">
                 KT
               </span>
             )}
@@ -65,6 +74,7 @@ function Index() {
             </span>
           </div>
         </div>
+        <div className="h-[3px] w-full bg-[image:linear-gradient(90deg,transparent,oklch(0.73_0.145_62/0.7),transparent)]" />
       </header>
 
       <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
@@ -90,9 +100,9 @@ function Index() {
           />
         )}
 
-        <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
-          <div className="space-y-8">
-            <section className="space-y-4">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[1.6fr_1fr]">
+          <div className="min-w-0 space-y-8">
+            <section className="min-w-0 space-y-4">
               <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
                 Twoje urządzenia
               </h2>
@@ -101,7 +111,7 @@ function Index() {
               ))}
             </section>
 
-            <section className="space-y-4">
+            <section className="min-w-0 space-y-4">
               <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
                 Historia serwisów
               </h2>
@@ -109,7 +119,7 @@ function Index() {
             </section>
           </div>
 
-          <div className="space-y-8">
+          <div className="min-w-0 space-y-8">
             <section className="space-y-3 rounded-xl border border-border bg-card p-5 shadow-panel">
               <div className="flex items-center gap-2 text-brand">
                 <CalendarClock className="size-5" />

@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WlascicielRouteImport } from './routes/wlasciciel'
 import { Route as TechnikIndexRouteImport } from './routes/technik.index'
+import { Route as TechnikVisitIdRouteImport } from './routes/technik.$visitId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WlascicielRoute = WlascicielRouteImport.update({
+  id: '/wlasciciel',
+  path: '/wlasciciel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TechnikIndexRoute = TechnikIndexRouteImport.update({
@@ -22,30 +29,43 @@ const TechnikIndexRoute = TechnikIndexRouteImport.update({
   path: '/technik/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnikVisitIdRoute = TechnikVisitIdRouteImport.update({
+  id: '/technik/$visitId',
+  path: '/technik/$visitId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/wlasciciel': typeof WlascicielRoute
+  '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/wlasciciel': typeof WlascicielRoute
+  '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik': typeof TechnikIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/wlasciciel': typeof WlascicielRoute
+  '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/technik/'
+  fullPaths: '/' | '/wlasciciel' | '/technik/$visitId' | '/technik/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/technik'
-  id: '__root__' | '/' | '/technik/'
+  to: '/' | '/wlasciciel' | '/technik/$visitId' | '/technik'
+  id: '__root__' | '/' | '/wlasciciel' | '/technik/$visitId' | '/technik/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WlascicielRoute: typeof WlascicielRoute
+  TechnikVisitIdRoute: typeof TechnikVisitIdRoute
   TechnikIndexRoute: typeof TechnikIndexRoute
 }
 
@@ -58,6 +78,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wlasciciel': {
+      id: '/wlasciciel'
+      path: '/wlasciciel'
+      fullPath: '/wlasciciel'
+      preLoaderRoute: typeof WlascicielRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technik/': {
       id: '/technik/'
       path: '/technik'
@@ -65,11 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnikIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technik/$visitId': {
+      id: '/technik/$visitId'
+      path: '/technik/$visitId'
+      fullPath: '/technik/$visitId'
+      preLoaderRoute: typeof TechnikVisitIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WlascicielRoute: WlascicielRoute,
+  TechnikVisitIdRoute: TechnikVisitIdRoute,
   TechnikIndexRoute: TechnikIndexRoute,
 }
 export const routeTree = rootRouteImport

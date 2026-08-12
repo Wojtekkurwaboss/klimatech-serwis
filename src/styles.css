@@ -72,10 +72,10 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.875rem;
   --font-display-family: "Barlow Condensed", "Barlow", system-ui, sans-serif;
   --font-sans-family: "IBM Plex Sans", system-ui, sans-serif;
-  --background: oklch(0.973 0.006 240);
+  --background: oklch(0.96 0.009 242);
   --foreground: oklch(0.24 0.035 240);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.24 0.035 240);
@@ -118,7 +118,16 @@
 }
 
 @theme inline {
-  --shadow-panel: 0 1px 2px oklch(0.34 0.062 237 / 0.06), 0 8px 24px -12px oklch(0.34 0.062 237 / 0.22);
+  --shadow-panel: 0 1px 1px oklch(0.34 0.062 237 / 0.04), 0 2px 6px oklch(0.34 0.062 237 / 0.05),
+    0 16px 32px -16px oklch(0.34 0.062 237 / 0.28);
+  --shadow-lift: 0 1px 1px oklch(0.34 0.062 237 / 0.04), 0 4px 10px oklch(0.34 0.062 237 / 0.07),
+    0 24px 40px -16px oklch(0.34 0.062 237 / 0.34);
+  --gradient-brand: linear-gradient(
+    135deg,
+    oklch(0.3 0.058 235) 0%,
+    oklch(0.34 0.062 237) 55%,
+    oklch(0.4 0.07 232) 100%
+  );
 }
 
 .dark {
