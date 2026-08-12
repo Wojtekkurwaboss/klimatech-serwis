@@ -1,18 +1,51 @@
-# KlimaTech Serwis — Panel Klienta / Technika / Właściciela
+<p align="center">
+  <img src="public/readme-banner.svg" alt="KlimaTech Serwis — Panel Klienta, Technika i Właściciela" width="100%" />
+</p>
 
-Demonstracyjna aplikacja webowa dla firm serwisujących klimatyzację i pompy ciepła. Trzy panele w jednym systemie:
+<h3 align="center">Ile razy w tym roku zapomnieliście o terminie obowiązkowego przeglądu szczelności instalacji u klienta?</h3>
 
-- **Panel Klienta** (`/`) — historia serwisowa urządzenia, status gwarancji, przypomnienia o obowiązkowych przeglądach szczelności (zgodność z rejestrem CRO), zgłaszanie awarii, dokumenty do pobrania.
-- **Panel Technika** (`/technik`) — lista wizyt na dziś, zamykanie zlecenia z notatką, dokumentacją zdjęciową i podpisem klienta.
-- **Panel Właściciela** (`/wlasciciel`) — status zgodności wszystkich klientów z obowiązkowymi przeglądami, statystyki ryzyka, grafik zespołu.
+<p align="center">
+  Ta aplikacja pilnuje tego za Was. Zero excela, zero karteczek, zero "chyba umówiłem tego klienta".
+</p>
 
-## Dane firmy i klienta
+<p align="center">
+  <a href="https://klimatech-repo.vercel.app"><strong>→ Zobacz działające demo</strong></a>
+</p>
 
-Wszystkie dane (nazwa firmy, branding, klienci, urządzenia, historia serwisowa) znajdują się w jednym pliku: `src/config/tenant.ts`. Dzięki temu panel można spersonalizować pod inną firmę bez zmian w kodzie widoków.
+---
 
-## Uruchomienie lokalne
+## Co to jest
 
-Wymagany Node.js.
+Gotowy system dla firm serwisujących **klimatyzację i pompy ciepła** — trzy panele w jednym produkcie:
+
+| Panel | Do czego służy |
+|---|---|
+| **Panel Klienta** | Historia serwisowa urządzenia, status gwarancji, automatyczne przypomnienie o obowiązkowym przeglądzie (z jasno pokazanym ryzykiem kontroli/kary), zgłaszanie awarii, dokumenty do pobrania. |
+| **Panel Technika** | Grafik wizyt na dziś, zamykanie zlecenia z notatką, dokumentacją zdjęciową i podpisem klienta na miejscu. |
+| **Panel Właściciela** | Status zgodności wszystkich klientów z przeglądami w jednym miejscu, statystyki ryzyka, grafik zespołu. |
+
+Demo pokazuje przykładową firmę (KlimaTech Serwis) z przykładowymi klientami — dokładnie tak będzie wyglądać u Ciebie, tylko z Twoim brandingiem i Twoimi danymi.
+
+## Dla kogo to jest
+
+Jeśli prowadzisz firmę instalującą lub serwisującą klimatyzację/pompy ciepła i:
+- gubisz terminy przeglądów szczelności i boisz się kontroli,
+- prowadzisz historię klientów w Excelu albo na kartkach,
+- Twoi technicy dzwonią do biura żeby sprawdzić co było u klienta ostatnim razem,
+
+...to ten system rozwiązuje dokładnie ten problem.
+
+## Personalizacja pod Twoją firmę
+
+Robię darmową personalizację demo pod Wasz branding (logo, kolory, nazwa firmy) i przykładowe dane — żebyście zobaczyli dokładnie jak to będzie wyglądać u Was, zanim cokolwiek zapłacicie.
+
+**Napisz: [wojtekzieba.w@gmail.com](mailto:wojtekzieba.w@gmail.com)**
+
+---
+
+## Dla developerów
+
+Stos: TanStack Start (React, SSR) + Vite + Tailwind CSS + shadcn/ui. Wszystkie dane firmy/klientów w jednym pliku `src/config/tenant.ts` — łatwa personalizacja bez zmian w kodzie widoków.
 
 ```sh
 npm install
@@ -20,14 +53,3 @@ npm run dev
 ```
 
 Aplikacja wystartuje pod `http://localhost:8080`.
-
-## Build produkcyjny
-
-```sh
-npm run build
-npm run preview
-```
-
-## Stos technologiczny
-
-TanStack Start (React, SSR) + Vite + Tailwind CSS + shadcn/ui.
