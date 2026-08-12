@@ -34,6 +34,93 @@ export interface DocumentItem {
   fileType: string;
 }
 
+export interface Visit {
+  id: string;
+  time: string;
+  clientName: string;
+  address: string;
+  deviceModel: string;
+  deviceCategory: string;
+  plannedType: ServiceType;
+  lastVisitNote: string;
+  croNumber: string;
+}
+
+export const technician = {
+  firstName: "Marek",
+  lastName: "Nowak",
+  role: "Technik serwisu",
+  certNumber: "F-GAZ/PL/2019/88213",
+};
+
+export const todayVisits: Visit[] = [
+  {
+    id: "v1",
+    time: "08:30",
+    clientName: "Anna Kowalska",
+    address: "ul. Kwiatowa 14/3, Warszawa",
+    deviceModel: "Daikin Perfera 3,5 kW",
+    deviceCategory: "Klimatyzacja split",
+    plannedType: "przegląd",
+    lastVisitNote: "Wykryto minimalny ubytek czynnika – sprawdzić szczelność złączek.",
+    croNumber: "CRO/2023/PL/0045128",
+  },
+  {
+    id: "v2",
+    time: "10:00",
+    clientName: "Piotr Lewandowski",
+    address: "ul. Sosnowa 8, Piaseczno",
+    deviceModel: "Mitsubishi MSZ-AP 2,5 kW",
+    deviceCategory: "Klimatyzacja split",
+    plannedType: "naprawa",
+    lastVisitNote: "Klient zgłaszał hałas jednostki zewnętrznej przy starcie.",
+    croNumber: "CRO/2022/PL/0031907",
+  },
+  {
+    id: "v3",
+    time: "11:45",
+    clientName: "Biuro Rachunkowe Saldo",
+    address: "al. Niepodległości 120, Warszawa",
+    deviceModel: "LG Multi V S 12 kW",
+    deviceCategory: "System multi-split",
+    plannedType: "uzupełnienie czynnika",
+    lastVisitNote: "Ciśnienie poniżej normy, zalecane uzupełnienie R410A.",
+    croNumber: "CRO/2021/PL/0018442",
+  },
+  {
+    id: "v4",
+    time: "14:15",
+    clientName: "Katarzyna Wiśniewska",
+    address: "ul. Polna 3, Konstancin",
+    deviceModel: "Panasonic Aquarea 9 kW",
+    deviceCategory: "Pompa ciepła",
+    plannedType: "przegląd",
+    lastVisitNote: "Po sezonie grzewczym – kontrola zasobnika i pracy sprężarki.",
+    croNumber: "CRO/2024/PL/0057110",
+  },
+  {
+    id: "v5",
+    time: "16:00",
+    clientName: "Tomasz Dąbrowski",
+    address: "ul. Wierzbowa 21, Józefosław",
+    deviceModel: "Samsung Wind-Free 5,0 kW",
+    deviceCategory: "Klimatyzacja split",
+    plannedType: "montaż",
+    lastVisitNote: "Nowa instalacja – przygotowana trasa chłodnicza i przepust.",
+    croNumber: "—",
+  },
+];
+
+export const serviceTypes: ServiceType[] = [
+  "przegląd",
+  "naprawa",
+  "uzupełnienie czynnika",
+  "montaż",
+];
+
+/** Czynności wymagające wpisu do Centralnego Rejestru Operatorów. */
+export const croRequiredTypes: ServiceType[] = ["uzupełnienie czynnika", "przegląd"];
+
 export const tenantConfig = {
   company: {
     name: "KlimaTech Serwis",
