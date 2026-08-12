@@ -145,10 +145,9 @@ export const clientsOverview: ClientOverview[] = [
     clientName: "Anna Kowalska",
     deviceModel: "Daikin Perfera 3,5 kW",
     deviceCategory: "Klimatyzacja split",
-    lastReview: "2024-05-14",
-    nextReviewDue: "2025-07-31",
-    status: "overdue",
-    overdueDays: 12,
+    lastReview: "2026-08-12",
+    nextReviewDue: "2027-08-12",
+    status: "ok",
   },
   {
     id: "co-2",
@@ -216,7 +215,7 @@ export const tenantConfig = {
     clientNumber: "KL-2023-0481",
   },
   alert: {
-    active: true,
+    active: false,
     title: "Zaległy przegląd szczelności instalacji",
     message:
       "Twój obowiązkowy przegląd szczelności instalacji jest zaległy o 12 dni – umów wizytę, aby uniknąć ryzyka kontroli i utraty gwarancji",
@@ -237,6 +236,14 @@ export const tenantConfig = {
     },
   ] satisfies DeviceInfo[],
   serviceHistory: [
+    {
+      id: "srv-5",
+      date: "2026-08-12",
+      type: "przegląd",
+      description: "Przegląd okresowy szczelności instalacji: kontrola złączek, brak wykrytych nieszczelności. Instalacja zgodna z wymogami F-gaz.",
+      technician: "M. Nowak",
+      protocolUrl: "#protokol-2026-08-12",
+    },
     {
       id: "srv-4",
       date: "2025-06-18",
