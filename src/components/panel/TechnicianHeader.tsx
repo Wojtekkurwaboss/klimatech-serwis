@@ -1,8 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, UserRound } from "lucide-react";
-import { tenantConfig, technician } from "@/config/tenant";
 
-export function TechnicianHeader({ backTo }: { backTo?: string }) {
+export function TechnicianHeader({
+  backTo,
+  company,
+  technician,
+}: {
+  backTo?: string;
+  company: { name: string; logoUrl: string | null };
+  technician: { firstName: string; lastName: string };
+}) {
   return (
     <header className="sticky top-0 z-20 bg-[image:var(--gradient-brand)] text-brand-foreground shadow-[var(--shadow-lift)]">
       <div className="mx-auto grid max-w-2xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
@@ -14,19 +21,15 @@ export function TechnicianHeader({ backTo }: { backTo?: string }) {
           >
             <ArrowLeft className="size-4" />
           </Link>
-        ) : tenantConfig.company.logoUrl ? (
-          <img
-            src={tenantConfig.company.logoUrl}
-            alt={tenantConfig.company.name}
-            className="size-9 shrink-0 rounded-lg"
-          />
+        ) : company.logoUrl ? (
+          <img src={company.logoUrl} alt={company.name} className="size-9 shrink-0 rounded-lg" />
         ) : (
           <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-foreground/10 font-display text-sm font-bold ring-1 ring-white/10">
             KT
           </span>
         )}
         <div className="min-w-0 leading-tight">
-          <p className="truncate font-display text-base font-semibold">{tenantConfig.company.name}</p>
+          <p className="truncate font-display text-base font-semibold">{company.name}</p>
           <p className="truncate text-[11px] uppercase tracking-[0.2em] text-brand-foreground/70">
             Panel Technika
           </p>

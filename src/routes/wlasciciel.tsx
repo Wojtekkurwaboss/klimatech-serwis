@@ -10,37 +10,34 @@ import {
   Phone,
   UserRound,
 } from "lucide-react";
-import {
-  clientsOverview,
-  croRequiredTypes,
-  formatPlDate,
-  statusMeta,
-  statusRank,
-  technician,
-  tenantConfig,
-  todayVisits,
-} from "@/config/tenant";
+import { croRequiredTypes, formatPlDate, statusMeta, statusRank } from "@/config/tenant";
+import { requireRole } from "@/lib/session";
+import { getOwnerOverview } from "@/fns/tenant";
 
-const title = `Panel Właściciela – ${tenantConfig.company.name}`;
 const description =
   "Panel właściciela KlimaTech Serwis: status zgodności klientów z obowiązkowymi przeglądami i grafik zespołu na dziś.";
 
 export const Route = createFileRoute("/wlasciciel")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  beforeLoad: () => requireRole("owner"),
+  loader: () => getOwnerOverview(),
+  head: ({ loaderData }) => {
+    const title = `Panel Właściciela – ${loaderData?.company.name ?? "KlimaTech"}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: OwnerDashboard,
 });
 
 function OwnerDashboard() {
-  const { company } = tenantConfig;
+  const { company, technician, clientsOverview, todayVisits } = Route.useLoaderData();
   const [sortAsc, setSortAsc] = useState(true);
 
   const overdueCount = clientsOverview.filter((c) => c.status === "overdue").length;

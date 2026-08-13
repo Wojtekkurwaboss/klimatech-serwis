@@ -6,29 +6,34 @@ import { DeviceCard } from "@/components/panel/DeviceCard";
 import { ServiceTimeline } from "@/components/panel/ServiceTimeline";
 import { DocumentsList } from "@/components/panel/DocumentsList";
 import { FailureReportDialog } from "@/components/panel/FailureReportDialog";
-import { tenantConfig } from "@/config/tenant";
 import { toast } from "sonner";
+import { requireRole } from "@/lib/session";
+import { getClientDashboardData } from "@/fns/tenant";
 
-const title = `Panel Klienta – ${tenantConfig.company.name}`;
 const description =
   "Panel klienta serwisu klimatyzacji i pomp ciepła: przeglądy, historia serwisowa, dokumenty CRO i zgłaszanie awarii.";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  beforeLoad: () => requireRole("client"),
+  loader: () => getClientDashboardData(),
+  head: ({ loaderData }) => {
+    const title = `Panel Klienta – ${loaderData?.company.name ?? "KlimaTech"}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: Index,
 });
 
 function Index() {
-  const { company, client, alert, devices, serviceHistory, documents } = tenantConfig;
+  const { company, client, alert, devices, serviceHistory, documents } = Route.useLoaderData();
 
   return (
     <div className="min-h-screen bg-background font-sans">

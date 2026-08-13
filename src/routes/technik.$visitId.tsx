@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Camera, CheckCircle2, Clock, FileCheck2, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,13 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { TechnicianHeader } from "@/components/panel/TechnicianHeader";
 import { SignaturePad } from "@/components/panel/SignaturePad";
-import { croRequiredTypes, serviceTypes, todayVisits, type ServiceType } from "@/config/tenant";
+import { croRequiredTypes, serviceTypes, type ServiceType } from "@/config/tenant";
+import { requireRole } from "@/lib/session";
+import { closeVisit, getVisitDetail } from "@/fns/tenant";
 
 export const Route = createFileRoute("/technik/$visitId")({
+  beforeLoad: () => requireRole("technician"),
+  loader: ({ params }) => getVisitDetail({ data: { visitId: params.visitId } }),
   head: () => ({
     meta: [
       { title: "Szczegóły wizyty – Panel Technika KlimaTech Serwis" },
@@ -41,9 +45,8 @@ export const Route = createFileRoute("/technik/$visitId")({
 });
 
 function VisitDetail() {
-  const { visitId } = Route.useParams();
   const navigate = useNavigate();
-  const visit = useMemo(() => todayVisits.find((v) => v.id === visitId), [visitId]);
+  const { company, technician, visit } = Route.useLoaderData();
 
   const [type, setType] = useState<ServiceType>(visit?.plannedType ?? "przegląd");
   const [refrigerantKg, setRefrigerantKg] = useState("");
@@ -53,6 +56,7 @@ function VisitDetail() {
     after: false,
   });
   const [signed, setSigned] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const croAuto = croRequiredTypes.includes(type);
   const [croChecked, setCroChecked] = useState(croAuto);
   const [croTouched, setCroTouched] = useState(false);
@@ -61,7 +65,7 @@ function VisitDetail() {
   if (!visit) {
     return (
       <div className="min-h-screen bg-background font-sans">
-        <TechnicianHeader backTo="/technik" />
+        <TechnicianHeader backTo="/technik" company={company} technician={technician} />
         <p className="mx-auto max-w-2xl px-4 py-10 text-sm text-muted-foreground">
           Nie znaleziono wizyty.
         </p>
@@ -69,24 +73,42 @@ function VisitDetail() {
     );
   }
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signed) {
       toast.error("Wymagany podpis klienta");
       return;
     }
-    toast.success("Wizyta zamknięta", {
-      description: croValue
-        ? "Protokół zapisany, czynność oznaczona do wpisu w CRO."
-        : "Protokół zapisany i wysłany do klienta.",
-    });
-    setTimeout(() => navigate({ to: "/technik" }), 900);
+    setSubmitting(true);
+    try {
+      await closeVisit({
+        data: {
+          visitId: visit.id,
+          type,
+          refrigerantKg: type === "uzupełnienie czynnika" ? refrigerantKg : undefined,
+          note,
+          photoBefore: photos.before,
+          photoAfter: photos.after,
+          signed,
+          croRequired: croValue,
+        },
+      });
+      toast.success("Wizyta zamknięta", {
+        description: croValue
+          ? "Protokół zapisany, czynność oznaczona do wpisu w CRO."
+          : "Protokół zapisany i wysłany do klienta.",
+      });
+      setTimeout(() => navigate({ to: "/technik" }), 900);
+    } catch {
+      toast.error("Nie udało się zapisać wizyty. Spróbuj ponownie.");
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-background font-sans">
       <Toaster position="top-center" />
-      <TechnicianHeader backTo="/technik" />
+      <TechnicianHeader backTo="/technik" company={company} technician={technician} />
 
       <main className="mx-auto max-w-2xl space-y-5 px-4 py-5 pb-28">
         <section className="rounded-xl border border-border bg-card p-4 shadow-panel">
@@ -229,8 +251,8 @@ function VisitDetail() {
 
           <div className="fixed inset-x-0 bottom-0 border-t border-border bg-card/95 p-4 backdrop-blur">
             <div className="mx-auto max-w-2xl">
-              <Button type="submit" variant="alert" size="lg" className="w-full">
-                Zamknij wizytę
+              <Button type="submit" variant="alert" size="lg" className="w-full" disabled={submitting}>
+                {submitting ? "Zapisywanie…" : "Zamknij wizytę"}
               </Button>
             </div>
           </div>

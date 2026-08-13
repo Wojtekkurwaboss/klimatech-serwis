@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  nitro: {
+    // Pin explicitly instead of relying on Nitro's VERCEL env-var autodetection
+    // overriding the cloudflare-module default from @lovable.dev/vite-tanstack-config.
+    preset: "vercel",
+  },
 });

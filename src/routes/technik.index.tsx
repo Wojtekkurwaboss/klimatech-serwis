@@ -1,13 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, MapPin, ChevronRight, StickyNote } from "lucide-react";
 import { TechnicianHeader } from "@/components/panel/TechnicianHeader";
-import { todayVisits } from "@/config/tenant";
+import { requireRole } from "@/lib/session";
+import { getTodayVisits } from "@/fns/tenant";
 
 const title = "Panel Technika – KlimaTech Serwis";
 const description =
   "Mobilny panel technika KlimaTech Serwis: lista wizyt na dziś, notatki z poprzednich wizyt i zamykanie zleceń.";
 
 export const Route = createFileRoute("/technik/")({
+  beforeLoad: () => requireRole("technician"),
+  loader: () => getTodayVisits(),
   head: () => ({
     meta: [
       { title },
@@ -22,9 +25,11 @@ export const Route = createFileRoute("/technik/")({
 });
 
 function TechnicianVisits() {
+  const { company, technician, visits: todayVisits } = Route.useLoaderData();
+
   return (
     <div className="min-h-screen bg-background font-sans">
-      <TechnicianHeader />
+      <TechnicianHeader company={company} technician={technician} />
       <main className="mx-auto max-w-2xl px-4 py-5">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <h1 className="truncate font-display text-2xl font-semibold tracking-tight">

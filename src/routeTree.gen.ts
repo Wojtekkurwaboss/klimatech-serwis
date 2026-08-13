@@ -10,18 +10,49 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LogowanieRouteImport } from './routes/logowanie'
+import { Route as RejestracjaRouteImport } from './routes/rejestracja'
+import { Route as ResetHaslaRouteImport } from './routes/reset-hasla'
 import { Route as WlascicielRouteImport } from './routes/wlasciciel'
+import { Route as WylogujRouteImport } from './routes/wyloguj'
+import { Route as ZapomnialemHaslaRouteImport } from './routes/zapomnialem-hasla'
 import { Route as TechnikIndexRouteImport } from './routes/technik.index'
 import { Route as TechnikVisitIdRouteImport } from './routes/technik.$visitId'
+import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogowanieRoute = LogowanieRouteImport.update({
+  id: '/logowanie',
+  path: '/logowanie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RejestracjaRoute = RejestracjaRouteImport.update({
+  id: '/rejestracja',
+  path: '/rejestracja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetHaslaRoute = ResetHaslaRouteImport.update({
+  id: '/reset-hasla',
+  path: '/reset-hasla',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WlascicielRoute = WlascicielRouteImport.update({
   id: '/wlasciciel',
   path: '/wlasciciel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WylogujRoute = WylogujRouteImport.update({
+  id: '/wyloguj',
+  path: '/wyloguj',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
+  id: '/zapomnialem-hasla',
+  path: '/zapomnialem-hasla',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TechnikIndexRoute = TechnikIndexRouteImport.update({
@@ -34,39 +65,99 @@ const TechnikVisitIdRoute = TechnikVisitIdRouteImport.update({
   path: '/technik/$visitId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/logowanie': typeof LogowanieRoute
+  '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/wlasciciel': typeof WlascicielRoute
+  '/wyloguj': typeof WylogujRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/logowanie': typeof LogowanieRoute
+  '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/wlasciciel': typeof WlascicielRoute
+  '/wyloguj': typeof WylogujRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik': typeof TechnikIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/logowanie': typeof LogowanieRoute
+  '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/wlasciciel': typeof WlascicielRoute
+  '/wyloguj': typeof WylogujRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/wlasciciel' | '/technik/$visitId' | '/technik/'
+  fullPaths:
+    | '/'
+    | '/logowanie'
+    | '/rejestracja'
+    | '/reset-hasla'
+    | '/wlasciciel'
+    | '/wyloguj'
+    | '/zapomnialem-hasla'
+    | '/technik/$visitId'
+    | '/technik/'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/wlasciciel' | '/technik/$visitId' | '/technik'
-  id: '__root__' | '/' | '/wlasciciel' | '/technik/$visitId' | '/technik/'
+  to:
+    | '/'
+    | '/logowanie'
+    | '/rejestracja'
+    | '/reset-hasla'
+    | '/wlasciciel'
+    | '/wyloguj'
+    | '/zapomnialem-hasla'
+    | '/technik/$visitId'
+    | '/technik'
+    | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/logowanie'
+    | '/rejestracja'
+    | '/reset-hasla'
+    | '/wlasciciel'
+    | '/wyloguj'
+    | '/zapomnialem-hasla'
+    | '/technik/$visitId'
+    | '/technik/'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LogowanieRoute: typeof LogowanieRoute
+  RejestracjaRoute: typeof RejestracjaRoute
+  ResetHaslaRoute: typeof ResetHaslaRoute
   WlascicielRoute: typeof WlascicielRoute
+  WylogujRoute: typeof WylogujRoute
+  ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
   TechnikVisitIdRoute: typeof TechnikVisitIdRoute
   TechnikIndexRoute: typeof TechnikIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +169,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logowanie': {
+      id: '/logowanie'
+      path: '/logowanie'
+      fullPath: '/logowanie'
+      preLoaderRoute: typeof LogowanieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rejestracja': {
+      id: '/rejestracja'
+      path: '/rejestracja'
+      fullPath: '/rejestracja'
+      preLoaderRoute: typeof RejestracjaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-hasla': {
+      id: '/reset-hasla'
+      path: '/reset-hasla'
+      fullPath: '/reset-hasla'
+      preLoaderRoute: typeof ResetHaslaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wlasciciel': {
       id: '/wlasciciel'
       path: '/wlasciciel'
       fullPath: '/wlasciciel'
       preLoaderRoute: typeof WlascicielRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wyloguj': {
+      id: '/wyloguj'
+      path: '/wyloguj'
+      fullPath: '/wyloguj'
+      preLoaderRoute: typeof WylogujRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/zapomnialem-hasla': {
+      id: '/zapomnialem-hasla'
+      path: '/zapomnialem-hasla'
+      fullPath: '/zapomnialem-hasla'
+      preLoaderRoute: typeof ZapomnialemHaslaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/technik/': {
@@ -99,14 +225,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechnikVisitIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LogowanieRoute: LogowanieRoute,
+  RejestracjaRoute: RejestracjaRoute,
+  ResetHaslaRoute: ResetHaslaRoute,
   WlascicielRoute: WlascicielRoute,
+  WylogujRoute: WylogujRoute,
+  ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
   TechnikVisitIdRoute: TechnikVisitIdRoute,
   TechnikIndexRoute: TechnikIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

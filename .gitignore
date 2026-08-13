@@ -17,6 +17,9 @@ dist-ssr
 .nitro
 *.local
 
+# Env
+.env
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
@@ -32,3 +35,9 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.env*
+
+# Agent skill installers (Vercel/Neon integration)
+.agents/
+.claude/
+skills-lock.json

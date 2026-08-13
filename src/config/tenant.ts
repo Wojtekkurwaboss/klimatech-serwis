@@ -130,6 +130,18 @@ export interface ClientOverview {
 /** Ranga pilności do sortowania — im mniejsza, tym pilniejsze. */
 export const statusRank: Record<ReviewStatus, number> = { overdue: 0, upcoming: 1, ok: 2 };
 
+/** Oblicza status przeglądu na podstawie daty następnego przeglądu (runtime, nie ze statycznych danych). */
+export function computeReviewStatus(
+  nextReviewDue: string,
+  now: Date = new Date(),
+): { status: ReviewStatus; overdueDays?: number; dueInDays?: number } {
+  const due = new Date(nextReviewDue);
+  const diffDays = Math.round((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays < 0) return { status: "overdue", overdueDays: -diffDays };
+  if (diffDays <= 14) return { status: "upcoming", dueInDays: diffDays };
+  return { status: "ok" };
+}
+
 export const statusMeta: Record<ReviewStatus, { label: string; className: string }> = {
   overdue: { label: "Zaległy", className: "bg-alert/15 text-alert border border-alert/30" },
   upcoming: {
