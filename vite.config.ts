@@ -16,5 +16,10 @@ export default defineConfig({
     // Pin explicitly instead of relying on Nitro's VERCEL env-var autodetection
     // overriding the cloudflare-module default from @lovable.dev/vite-tanstack-config.
     preset: "vercel",
+    // Works around a known Rolldown bug (rolldown/rolldown#8809): circular
+    // "__exportAll" runtime-helper dependency between the entry chunk and a
+    // common chunk during code-splitting causes "Export '..._exports' is not
+    // defined in module" at runtime. Bundling to a single file sidesteps it.
+    inlineDynamicImports: true,
   },
 });
