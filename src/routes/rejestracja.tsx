@@ -41,7 +41,7 @@ function RejestracjaPage() {
         navigate({ to: "/logowanie" });
         return;
       }
-      navigate({ to: "/onboarding" });
+      navigate({ to: "/wlasciciel" });
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Nie udało się utworzyć konta. Spróbuj ponownie.");
     }
