@@ -9,6 +9,7 @@ import { FailureReportDialog } from "@/components/panel/FailureReportDialog";
 import { toast } from "sonner";
 import { requireRole } from "@/lib/session";
 import { getClientDashboardData } from "@/fns/tenant";
+import { requestReview } from "@/fns/client-actions";
 
 const description =
   "Panel klienta serwisu klimatyzacji i pomp ciepła: przeglądy, historia serwisowa, dokumenty CRO i zgłaszanie awarii.";
@@ -97,11 +98,16 @@ function Index() {
             title={alert.title}
             message={alert.message}
             ctaLabel={alert.ctaLabel}
-            onCta={() =>
-              toast.success("Prośba o termin przeglądu wysłana", {
-                description: "Skontaktujemy się, aby potwierdzić dogodny termin wizyty.",
-              })
-            }
+            onCta={async () => {
+              try {
+                await requestReview();
+                toast.success("Prośba o termin przeglądu wysłana", {
+                  description: "Skontaktujemy się, aby potwierdzić dogodny termin wizyty.",
+                });
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Nie udało się wysłać prośby. Spróbuj ponownie.");
+              }
+            }}
           />
         )}
 

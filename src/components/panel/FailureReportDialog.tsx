@@ -13,20 +13,30 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { reportFailure } from "@/fns/client-actions";
 
 export function FailureReportDialog() {
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Zgłoszenie awarii wysłane", {
-      description: "Serwisant skontaktuje się z Tobą w ciągu 24 godzin.",
-    });
-    setOpen(false);
-    setDescription("");
-    setFileName(null);
+    setSubmitting(true);
+    try {
+      await reportFailure({ data: { description, fileName: fileName ?? undefined } });
+      toast.success("Zgłoszenie awarii wysłane", {
+        description: "Serwisant skontaktuje się z Tobą w ciągu 24 godzin.",
+      });
+      setOpen(false);
+      setDescription("");
+      setFileName(null);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -73,9 +83,9 @@ export function FailureReportDialog() {
             />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="alert">
+            <Button type="submit" variant="alert" disabled={submitting}>
               <Send className="size-4" />
-              Wyślij zgłoszenie
+              {submitting ? "Wysyłanie…" : "Wyślij zgłoszenie"}
             </Button>
           </DialogFooter>
         </form>
