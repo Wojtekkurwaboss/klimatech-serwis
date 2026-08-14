@@ -9,22 +9,22 @@
 </p>
 
 <p align="center">
-  <a href="https://klimatech-repo.vercel.app"><strong>→ Zobacz działające demo</strong></a>
+  <a href="https://klimatech-repo.vercel.app/rejestracja"><strong>→ Załóż darmowe konto i wypróbuj</strong></a>
 </p>
 
 ---
 
 ## Co to jest
 
-Gotowy system dla firm serwisujących **klimatyzację i pompy ciepła** — trzy panele w jednym produkcie:
+Gotowy system SaaS dla firm serwisujących **klimatyzację i pompy ciepła** — trzy panele w jednym produkcie:
 
 | Panel | Do czego służy |
 |---|---|
-| **Panel Klienta** | Historia serwisowa urządzenia, status gwarancji, automatyczne przypomnienie o obowiązkowym przeglądzie (z jasno pokazanym ryzykiem kontroli/kary), zgłaszanie awarii, dokumenty do pobrania. |
+| **Panel Właściciela** | Dodajesz klientów, urządzenia i techników, planujesz wizyty, widzisz status zgodności całej firmy z przeglądami jednym rzutem oka. |
 | **Panel Technika** | Grafik wizyt na dziś, zamykanie zlecenia z notatką, dokumentacją zdjęciową i podpisem klienta na miejscu. |
-| **Panel Właściciela** | Status zgodności wszystkich klientów z przeglądami w jednym miejscu, statystyki ryzyka, grafik zespołu. |
+| **Panel Klienta** | Historia serwisowa urządzenia, status gwarancji, automatyczne przypomnienie o obowiązkowym przeglądzie, zgłaszanie awarii. |
 
-Demo pokazuje przykładową firmę (KlimaTech Serwis) z przykładowymi klientami — dokładnie tak będzie wyglądać u Ciebie, tylko z Twoim brandingiem i Twoimi danymi.
+To nie jest statyczne demo — zarejestruj firmę, dodaj pierwszego klienta i technika, i od razu masz działający system.
 
 ## Dla kogo to jest
 
@@ -35,9 +35,15 @@ Jeśli prowadzisz firmę instalującą lub serwisującą klimatyzację/pompy cie
 
 ...to ten system rozwiązuje dokładnie ten problem.
 
-## Personalizacja pod Twoją firmę
+## Jak zacząć
 
-Robię darmową personalizację demo pod Wasz branding (logo, kolory, nazwa firmy) i przykładowe dane — żebyście zobaczyli dokładnie jak to będzie wyglądać u Was, zanim cokolwiek zapłacicie.
+1. [Załóż konto firmy](https://klimatech-repo.vercel.app/rejestracja) — 2 minuty, za darmo
+2. Dodaj pierwszego klienta, urządzenie i technika z panelu właściciela
+3. Zaplanuj pierwszą wizytę — technik od razu zobaczy ją w swoim grafiku
+
+## Wdrożenie pod Twoją firmę
+
+Chcesz własny branding, import istniejącej bazy klientów albo pomoc z wdrożeniem?
 
 **Napisz: [wojtekzieba.w@gmail.com](mailto:wojtekzieba.w@gmail.com)**
 
@@ -45,7 +51,7 @@ Robię darmową personalizację demo pod Wasz branding (logo, kolory, nazwa firm
 
 ## Dla developerów
 
-Stos: TanStack Start (React, SSR) + Vite + Tailwind CSS + shadcn/ui. Wszystkie dane firmy/klientów w jednym pliku `src/config/tenant.ts` — łatwa personalizacja bez zmian w kodzie widoków.
+Stos: TanStack Start (React, SSR) + Vite + Tailwind CSS + shadcn/ui + Drizzle ORM + better-auth + Neon Postgres. Wszystkie dane firmy w bazie, konfiguracja per-tenant automatyczna po rejestracji.
 
 ```sh
 npm install
