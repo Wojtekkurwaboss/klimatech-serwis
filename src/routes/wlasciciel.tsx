@@ -8,11 +8,17 @@ import {
   FileWarning,
   MapPin,
   Phone,
+  UserPlus,
   UserRound,
+  Wrench,
 } from "lucide-react";
 import { croRequiredTypes, formatPlDate, statusMeta, statusRank } from "@/config/tenant";
 import { requireRole } from "@/lib/session";
 import { getOwnerOverview } from "@/fns/tenant";
+import { Button } from "@/components/ui/button";
+import { AddClientDialog } from "@/components/panel/add-client-dialog";
+import { AddTechnicianDialog } from "@/components/panel/add-technician-dialog";
+import { AddDeviceDialog } from "@/components/panel/add-device-dialog";
 
 const description =
   "Panel właściciela KlimaTech Serwis: status zgodności klientów z obowiązkowymi przeglądami i grafik zespołu na dziś.";
@@ -37,12 +43,17 @@ export const Route = createFileRoute("/wlasciciel")({
 });
 
 function OwnerDashboard() {
-  const { company, technician, clientsOverview, todayVisits } = Route.useLoaderData();
+  const { company, technicians, clientsOverview } = Route.useLoaderData();
   const [sortAsc, setSortAsc] = useState(true);
+  const [addClientOpen, setAddClientOpen] = useState(false);
+  const [addTechnicianOpen, setAddTechnicianOpen] = useState(false);
+  const [addDeviceOpen, setAddDeviceOpen] = useState(false);
+  const [addDeviceClientId, setAddDeviceClientId] = useState<string | undefined>(undefined);
 
+  const allTodayVisits = technicians.flatMap((t) => t.visits);
   const overdueCount = clientsOverview.filter((c) => c.status === "overdue").length;
   const upcomingCount = clientsOverview.filter((c) => c.status === "upcoming").length;
-  const croTodayCount = todayVisits.filter((v) => croRequiredTypes.includes(v.plannedType)).length;
+  const croTodayCount = allTodayVisits.filter((v) => croRequiredTypes.includes(v.plannedType)).length;
 
   const sortedClients = useMemo(() => {
     const copy = [...clientsOverview];
@@ -119,11 +130,23 @@ function OwnerDashboard() {
       </header>
 
       <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
-        <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">Przegląd firmy</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Status zgodności klientów z obowiązkowymi przeglądami i grafik zespołu na dziś
-          </p>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="font-display text-3xl font-semibold tracking-tight">Przegląd firmy</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Status zgodności klientów z obowiązkowymi przeglądami i grafik zespołu na dziś
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={() => setAddTechnicianOpen(true)}>
+              <Wrench className="size-4" />
+              Dodaj technika
+            </Button>
+            <Button variant="brand" size="sm" onClick={() => setAddClientOpen(true)}>
+              <UserPlus className="size-4" />
+              Dodaj klienta
+            </Button>
+          </div>
         </div>
 
         <div className="grid min-w-0 gap-4 sm:grid-cols-3">
@@ -151,14 +174,26 @@ function OwnerDashboard() {
               <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
                 Klienci
               </h2>
-              <button
-                type="button"
-                onClick={() => setSortAsc((v) => !v)}
-                className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                <ArrowUpDown className="size-3.5" />
-                Sortuj wg statusu {sortAsc ? "(najpilniejsze na górze)" : "(najpilniejsze na dole)"}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAddDeviceClientId(undefined);
+                    setAddDeviceOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  + Dodaj urządzenie
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSortAsc((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  <ArrowUpDown className="size-3.5" />
+                  Sortuj wg statusu {sortAsc ? "(najpilniejsze na górze)" : "(najpilniejsze na dole)"}
+                </button>
+              </div>
             </div>
 
             <div className="overflow-hidden rounded-xl border border-border/70 bg-card shadow-panel">
@@ -211,53 +246,95 @@ function OwnerDashboard() {
           </section>
 
           <section className="min-w-0 space-y-4">
-            <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
-              Grafik technika – dziś
-            </h2>
-            <div className="space-y-3 rounded-xl border border-border/70 bg-card p-4 shadow-panel">
-              <div className="flex items-center gap-2 border-b border-border pb-3">
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-brand">
-                  <UserRound className="size-4" />
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">
-                    {technician.firstName} {technician.lastName}
-                  </p>
-                  <p className="truncate text-xs text-muted-foreground">{technician.role}</p>
-                </div>
-                <span className="ml-auto shrink-0 rounded-full bg-brand px-2.5 py-1 text-xs font-semibold text-brand-foreground">
-                  {todayVisits.length} wizyt
-                </span>
-              </div>
-              <ul className="space-y-2.5">
-                {todayVisits.map((visit) => (
-                  <li
-                    key={visit.id}
-                    className="flex items-start gap-3 rounded-lg border border-border/60 bg-secondary/40 p-3 text-sm"
-                  >
-                    <span className="flex shrink-0 items-center gap-1 rounded-md bg-card px-2 py-1 font-display text-xs font-semibold tabular-nums text-brand shadow-sm">
-                      <Clock className="size-3.5" />
-                      {visit.time}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium">{visit.clientName}</p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        <MapPin className="mr-1 inline size-3 shrink-0" />
-                        {visit.address}
-                      </p>
-                    </div>
-                    {croRequiredTypes.includes(visit.plannedType) && (
-                      <span className="shrink-0 rounded-full bg-alert/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-alert">
-                        CRO
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
+                Grafik zespołu – dziś
+              </h2>
+              <button
+                type="button"
+                onClick={() => setAddTechnicianOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                + Dodaj technika
+              </button>
             </div>
+
+            {technicians.length === 0 ? (
+              <div className="space-y-3 rounded-xl border border-dashed border-border/70 bg-card p-5 text-center shadow-panel">
+                <p className="text-sm text-muted-foreground">
+                  Brak techników — dodaj pierwszego, aby zobaczyć grafik.
+                </p>
+                <Button variant="brand" size="sm" onClick={() => setAddTechnicianOpen(true)}>
+                  <Wrench className="size-4" />
+                  Dodaj technika
+                </Button>
+              </div>
+            ) : (
+              technicians.map((technician) => (
+                <div
+                  key={technician.id}
+                  className="space-y-3 rounded-xl border border-border/70 bg-card p-4 shadow-panel"
+                >
+                  <div className="flex items-center gap-2 border-b border-border pb-3">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-brand">
+                      <UserRound className="size-4" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">
+                        {technician.firstName} {technician.lastName}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">{technician.role}</p>
+                    </div>
+                    <span className="ml-auto shrink-0 rounded-full bg-brand px-2.5 py-1 text-xs font-semibold text-brand-foreground">
+                      {technician.visits.length} wizyt
+                    </span>
+                  </div>
+                  {technician.visits.length === 0 ? (
+                    <p className="py-2 text-center text-xs text-muted-foreground">Brak wizyt dziś</p>
+                  ) : (
+                    <ul className="space-y-2.5">
+                      {technician.visits.map((visit) => (
+                        <li
+                          key={visit.id}
+                          className="flex items-start gap-3 rounded-lg border border-border/60 bg-secondary/40 p-3 text-sm"
+                        >
+                          <span className="flex shrink-0 items-center gap-1 rounded-md bg-card px-2 py-1 font-display text-xs font-semibold tabular-nums text-brand shadow-sm">
+                            <Clock className="size-3.5" />
+                            {visit.time}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-medium">{visit.clientName}</p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              <MapPin className="mr-1 inline size-3 shrink-0" />
+                              {visit.address}
+                            </p>
+                          </div>
+                          {croRequiredTypes.includes(visit.plannedType) && (
+                            <span className="shrink-0 rounded-full bg-alert/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-alert">
+                              CRO
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))
+            )}
           </section>
         </div>
       </main>
+
+      <AddClientDialog
+        open={addClientOpen}
+        onOpenChange={setAddClientOpen}
+        onAddDeviceRequested={(clientId) => {
+          setAddDeviceClientId(clientId);
+          setAddDeviceOpen(true);
+        }}
+      />
+      <AddTechnicianDialog open={addTechnicianOpen} onOpenChange={setAddTechnicianOpen} />
+      <AddDeviceDialog open={addDeviceOpen} onOpenChange={setAddDeviceOpen} preselectedClientId={addDeviceClientId} />
 
       <footer className="border-t border-border bg-card">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:px-6">

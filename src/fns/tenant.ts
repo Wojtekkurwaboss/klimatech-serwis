@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { and, eq, gte, lt } from "drizzle-orm";
+import { and, eq, gte, inArray, lt } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { db } from "@/db/client";
@@ -315,19 +315,20 @@ export const getOwnerOverview = createServerFn({ method: "GET" }).handler(async 
       };
     });
 
-  const [technicianRow] = await db
+  const technicianRows = await db
     .select()
     .from(users)
-    .where(and(eq(users.tenantId, user.tenantId), eq(users.role, "technician")))
-    .limit(1);
+    .where(and(eq(users.tenantId, user.tenantId), eq(users.role, "technician")));
+  const technicianIds = technicianRows.map((t) => t.id);
 
-  const visitRows = technicianRow
+  const visitRows = technicianIds.length
     ? await db
         .select({
           id: visits.id,
           scheduledAt: visits.scheduledAt,
           plannedType: visits.plannedType,
           address: clients.address,
+          technicianId: visits.technicianId,
           clientFirstName: clientUserAlias.firstName,
           clientLastName: clientUserAlias.lastName,
         })
@@ -336,13 +337,34 @@ export const getOwnerOverview = createServerFn({ method: "GET" }).handler(async 
         .innerJoin(clientUserAlias, eq(clients.userId, clientUserAlias.id))
         .where(
           and(
-            eq(visits.technicianId, technicianRow.id),
+            inArray(visits.technicianId, technicianIds),
             gte(visits.scheduledAt, startOfToday()),
             lt(visits.scheduledAt, endOfToday()),
           ),
         )
         .orderBy(visits.scheduledAt)
     : [];
+
+  const visitsByTechnician = new Map<string, typeof visitRows>();
+  for (const v of visitRows) {
+    const list = visitsByTechnician.get(v.technicianId) ?? [];
+    list.push(v);
+    visitsByTechnician.set(v.technicianId, list);
+  }
+
+  const technicians = technicianRows.map((t) => ({
+    id: t.id,
+    firstName: t.firstName,
+    lastName: t.lastName,
+    role: "Technik serwisu",
+    visits: (visitsByTechnician.get(t.id) ?? []).map((v) => ({
+      id: v.id,
+      time: formatTime(v.scheduledAt),
+      clientName: `${v.clientFirstName} ${v.clientLastName}`,
+      address: v.address,
+      plannedType: dbToDisplayServiceType[v.plannedType],
+    })),
+  }));
 
   return {
     company: {
@@ -351,16 +373,7 @@ export const getOwnerOverview = createServerFn({ method: "GET" }).handler(async 
       phone: tenantRow.phone ?? "",
       email: tenantRow.email ?? "",
     },
-    technician: technicianRow
-      ? { firstName: technicianRow.firstName, lastName: technicianRow.lastName, role: "Technik serwisu" }
-      : { firstName: "Brak", lastName: "technika", role: "" },
+    technicians,
     clientsOverview: clientsOverviewData,
-    todayVisits: visitRows.map((v) => ({
-      id: v.id,
-      time: formatTime(v.scheduledAt),
-      clientName: `${v.clientFirstName} ${v.clientLastName}`,
-      address: v.address,
-      plannedType: dbToDisplayServiceType[v.plannedType],
-    })),
   };
 });
