@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowUpDown,
   CalendarClock,
+  CalendarPlus,
   Clock,
   FileWarning,
   MapPin,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { AddClientDialog } from "@/components/panel/add-client-dialog";
 import { AddTechnicianDialog } from "@/components/panel/add-technician-dialog";
 import { AddDeviceDialog } from "@/components/panel/add-device-dialog";
+import { ScheduleVisitDialog } from "@/components/panel/schedule-visit-dialog";
 
 const description =
   "Panel właściciela KlimaTech Serwis: status zgodności klientów z obowiązkowymi przeglądami i grafik zespołu na dziś.";
@@ -49,6 +51,9 @@ function OwnerDashboard() {
   const [addTechnicianOpen, setAddTechnicianOpen] = useState(false);
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [addDeviceClientId, setAddDeviceClientId] = useState<string | undefined>(undefined);
+  const [scheduleVisitOpen, setScheduleVisitOpen] = useState(false);
+  const [scheduleVisitClientId, setScheduleVisitClientId] = useState<string | undefined>(undefined);
+  const [scheduleVisitDeviceId, setScheduleVisitDeviceId] = useState<string | undefined>(undefined);
 
   const allTodayVisits = technicians.flatMap((t) => t.visits);
   const overdueCount = clientsOverview.filter((c) => c.status === "overdue").length;
@@ -142,9 +147,21 @@ function OwnerDashboard() {
               <Wrench className="size-4" />
               Dodaj technika
             </Button>
-            <Button variant="brand" size="sm" onClick={() => setAddClientOpen(true)}>
+            <Button variant="outline" size="sm" onClick={() => setAddClientOpen(true)}>
               <UserPlus className="size-4" />
               Dodaj klienta
+            </Button>
+            <Button
+              variant="brand"
+              size="sm"
+              onClick={() => {
+                setScheduleVisitClientId(undefined);
+                setScheduleVisitDeviceId(undefined);
+                setScheduleVisitOpen(true);
+              }}
+            >
+              <CalendarPlus className="size-4" />
+              Zaplanuj wizytę
             </Button>
           </div>
         </div>
@@ -250,13 +267,26 @@ function OwnerDashboard() {
               <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
                 Grafik zespołu – dziś
               </h2>
-              <button
-                type="button"
-                onClick={() => setAddTechnicianOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                + Dodaj technika
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleVisitClientId(undefined);
+                    setScheduleVisitDeviceId(undefined);
+                    setScheduleVisitOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  + Zaplanuj wizytę
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAddTechnicianOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  + Dodaj technika
+                </button>
+              </div>
             </div>
 
             {technicians.length === 0 ? (
@@ -334,7 +364,22 @@ function OwnerDashboard() {
         }}
       />
       <AddTechnicianDialog open={addTechnicianOpen} onOpenChange={setAddTechnicianOpen} />
-      <AddDeviceDialog open={addDeviceOpen} onOpenChange={setAddDeviceOpen} preselectedClientId={addDeviceClientId} />
+      <AddDeviceDialog
+        open={addDeviceOpen}
+        onOpenChange={setAddDeviceOpen}
+        preselectedClientId={addDeviceClientId}
+        onScheduleVisitRequested={(clientId, deviceId) => {
+          setScheduleVisitClientId(clientId);
+          setScheduleVisitDeviceId(deviceId);
+          setScheduleVisitOpen(true);
+        }}
+      />
+      <ScheduleVisitDialog
+        open={scheduleVisitOpen}
+        onOpenChange={setScheduleVisitOpen}
+        preselectedClientId={scheduleVisitClientId}
+        preselectedDeviceId={scheduleVisitDeviceId}
+      />
 
       <footer className="border-t border-border bg-card">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2 px-4 py-6 text-sm text-muted-foreground sm:px-6">

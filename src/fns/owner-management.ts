@@ -3,9 +3,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { and, eq, like, count } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
-import { clients, devices, users } from "@/db/schema";
+import { clients, devices, users, visits } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { requireSessionUser } from "@/lib/session";
+import { displayToDbServiceType } from "@/lib/service-type";
 
 function generateTempPassword() {
   return crypto.randomBytes(9).toString("base64url");
@@ -168,3 +169,94 @@ export const getOwnerClients = createServerFn({ method: "GET" }).handler(async (
 
   return rows;
 });
+
+const getClientDevicesSchema = z.object({ clientId: z.string().uuid() });
+
+export const getClientDevices = createServerFn({ method: "GET" })
+  .validator(getClientDevicesSchema)
+  .handler(async ({ data }) => {
+    const { user } = await requireSessionUser("owner");
+
+    const [clientRow] = await db
+      .select()
+      .from(clients)
+      .where(and(eq(clients.id, data.clientId), eq(clients.tenantId, user.tenantId)))
+      .limit(1);
+    if (!clientRow) throw new Error("Nie znaleziono klienta");
+
+    const rows = await db
+      .select({
+        id: devices.id,
+        model: devices.model,
+        category: devices.category,
+        croNumber: devices.croNumber,
+      })
+      .from(devices)
+      .where(eq(devices.clientId, data.clientId));
+
+    return rows;
+  });
+
+export const getOwnerTechnicians = createServerFn({ method: "GET" }).handler(async () => {
+  const { user } = await requireSessionUser("owner");
+
+  const rows = await db
+    .select({ id: users.id, firstName: users.firstName, lastName: users.lastName })
+    .from(users)
+    .where(and(eq(users.tenantId, user.tenantId), eq(users.role, "technician")));
+
+  return rows;
+});
+
+const scheduleVisitSchema = z.object({
+  clientId: z.string().uuid("Wybierz klienta"),
+  deviceId: z.string().uuid("Wybierz urządzenie"),
+  technicianId: z.string().min(1, "Wybierz technika"),
+  scheduledAt: z.string().min(1, "Podaj datę i godzinę"),
+  plannedType: z.enum(["montaż", "przegląd", "naprawa", "uzupełnienie czynnika"]),
+  note: z.string().optional(),
+});
+
+export const scheduleVisit = createServerFn({ method: "POST" })
+  .validator(scheduleVisitSchema)
+  .handler(async ({ data }) => {
+    const { user } = await requireSessionUser("owner");
+
+    const [clientRow] = await db
+      .select()
+      .from(clients)
+      .where(and(eq(clients.id, data.clientId), eq(clients.tenantId, user.tenantId)))
+      .limit(1);
+    if (!clientRow) throw new Error("Nie znaleziono klienta");
+
+    const [deviceRow] = await db
+      .select()
+      .from(devices)
+      .where(and(eq(devices.id, data.deviceId), eq(devices.clientId, data.clientId)))
+      .limit(1);
+    if (!deviceRow) throw new Error("Nie znaleziono urządzenia u tego klienta");
+
+    const [technicianRow] = await db
+      .select()
+      .from(users)
+      .where(and(eq(users.id, data.technicianId), eq(users.tenantId, user.tenantId), eq(users.role, "technician")))
+      .limit(1);
+    if (!technicianRow) throw new Error("Nie znaleziono technika");
+
+    const [visitRow] = await db
+      .insert(visits)
+      .values({
+        tenantId: user.tenantId,
+        clientId: data.clientId,
+        deviceId: data.deviceId,
+        technicianId: data.technicianId,
+        scheduledAt: new Date(data.scheduledAt),
+        plannedType: displayToDbServiceType[data.plannedType],
+        lastVisitNote: data.note || null,
+        croNumber: deviceRow.croNumber,
+        status: "scheduled",
+      })
+      .returning();
+
+    return { visitId: visitRow.id };
+  });

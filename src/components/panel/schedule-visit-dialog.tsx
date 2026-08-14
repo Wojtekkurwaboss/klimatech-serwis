@@ -7,128 +7,119 @@ import { useRouter } from "@tanstack/react-router";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { serviceTypes } from "@/config/tenant";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { addDevice, getOwnerClients } from "@/fns/owner-management";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getClientDevices, getOwnerClients, getOwnerTechnicians, scheduleVisit } from "@/fns/owner-management";
 
 const schema = z.object({
   clientId: z.string().uuid("Wybierz klienta"),
-  model: z.string().min(1, "Podaj model"),
-  category: z.string().min(1, "Podaj kategorię"),
-  installedAt: z.string().min(1, "Podaj datę instalacji"),
-  warrantyUntil: z.string().optional(),
-  warrantyActive: z.boolean(),
-  croNumber: z.string().optional(),
-  refrigerant: z.string().optional(),
-  location: z.string().optional(),
+  deviceId: z.string().uuid("Wybierz urządzenie"),
+  technicianId: z.string().min(1, "Wybierz technika"),
+  scheduledAt: z.string().min(1, "Podaj datę i godzinę"),
+  plannedType: z.enum(["montaż", "przegląd", "naprawa", "uzupełnienie czynnika"]),
+  note: z.string().optional(),
 });
 
 const emptyValues: z.infer<typeof schema> = {
   clientId: "",
-  model: "",
-  category: "",
-  installedAt: "",
-  warrantyUntil: "",
-  warrantyActive: false,
-  croNumber: "",
-  refrigerant: "",
-  location: "",
+  deviceId: "",
+  technicianId: "",
+  scheduledAt: "",
+  plannedType: "przegląd",
+  note: "",
 };
 
-export function AddDeviceDialog({
+export function ScheduleVisitDialog({
   open,
   onOpenChange,
   preselectedClientId,
-  onScheduleVisitRequested,
+  preselectedDeviceId,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   preselectedClientId: string | undefined;
-  onScheduleVisitRequested: (clientId: string, deviceId: string) => void;
+  preselectedDeviceId: string | undefined;
 }) {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [comboOpen, setComboOpen] = useState(false);
-  const [result, setResult] = useState<{ deviceId: string; clientId: string } | null>(null);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: emptyValues,
   });
+
+  const clientId = form.watch("clientId");
 
   const clientsQuery = useQuery({
     queryKey: ["owner-clients"],
     queryFn: () => getOwnerClients(),
     enabled: open,
   });
+  const devicesQuery = useQuery({
+    queryKey: ["client-devices", clientId],
+    queryFn: () => getClientDevices({ data: { clientId } }),
+    enabled: open && !!clientId,
+  });
+  const techniciansQuery = useQuery({
+    queryKey: ["owner-technicians"],
+    queryFn: () => getOwnerTechnicians(),
+    enabled: open,
+  });
 
   useEffect(() => {
     if (open) {
-      form.reset({ ...emptyValues, clientId: preselectedClientId ?? "" });
+      form.reset({
+        ...emptyValues,
+        clientId: preselectedClientId ?? "",
+        deviceId: preselectedDeviceId ?? "",
+      });
       setServerError(null);
-      setResult(null);
     }
-  }, [open, preselectedClientId]);
+  }, [open, preselectedClientId, preselectedDeviceId]);
 
   async function onSubmit(values: z.infer<typeof schema>) {
     setServerError(null);
     try {
-      const res = await addDevice({ data: values });
-      toast.success("Urządzenie dodane");
+      await scheduleVisit({ data: values });
+      toast.success("Wizyta zaplanowana");
       router.invalidate();
-      setResult({ deviceId: res.deviceId, clientId: values.clientId });
+      onOpenChange(false);
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : "Nie udało się dodać urządzenia. Spróbuj ponownie.");
+      setServerError(err instanceof Error ? err.message : "Nie udało się zaplanować wizyty. Spróbuj ponownie.");
     }
   }
 
   const clients = clientsQuery.data ?? [];
+  const devices = devicesQuery.data ?? [];
+  const technicians = techniciansQuery.data ?? [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] overflow-y-auto">
-        {result ? (
-          <>
-            <DialogHeader>
-              <DialogTitle>Urządzenie dodane</DialogTitle>
-              <DialogDescription>Możesz od razu zaplanować dla niego pierwszą wizytę.</DialogDescription>
-            </DialogHeader>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Button
-                type="button"
-                variant="brand"
-                className="flex-1"
-                onClick={() => {
-                  onScheduleVisitRequested(result.clientId, result.deviceId);
-                  onOpenChange(false);
-                }}
-              >
-                Zaplanuj pierwszą wizytę
-              </Button>
-              <Button type="button" variant="outline" className="flex-1" onClick={() => onOpenChange(false)}>
-                Zamknij
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
         <DialogHeader>
-          <DialogTitle>Dodaj urządzenie</DialogTitle>
-          <DialogDescription>Przypisz nowe urządzenie do istniejącego klienta.</DialogDescription>
+          <DialogTitle>Zaplanuj wizytę</DialogTitle>
+          <DialogDescription>Przypisz technika do klienta na wybrany termin.</DialogDescription>
         </DialogHeader>
         {serverError && (
           <Alert variant="destructive">
             <AlertDescription>{serverError}</AlertDescription>
           </Alert>
         )}
-        {clients.length === 0 && !clientsQuery.isLoading ? (
+        {technicians.length === 0 && !techniciansQuery.isLoading ? (
           <Alert>
-            <AlertDescription>Najpierw dodaj klienta — dopiero wtedy możesz przypisać mu urządzenie.</AlertDescription>
+            <AlertDescription>Najpierw dodaj technika — dopiero wtedy możesz zaplanować wizytę.</AlertDescription>
+          </Alert>
+        ) : clients.length === 0 && !clientsQuery.isLoading ? (
+          <Alert>
+            <AlertDescription>Najpierw dodaj klienta — dopiero wtedy możesz zaplanować wizytę.</AlertDescription>
           </Alert>
         ) : (
           <Form {...form}>
@@ -169,6 +160,7 @@ export function AddDeviceDialog({
                                     value={`${c.firstName} ${c.lastName} ${c.clientNumber}`}
                                     onSelect={() => {
                                       field.onChange(c.id);
+                                      form.setValue("deviceId", "");
                                       setComboOpen(false);
                                     }}
                                   >
@@ -188,83 +180,72 @@ export function AddDeviceDialog({
                   );
                 }}
               />
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="model"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Model</FormLabel>
-                      <FormControl>
-                        <Input placeholder="np. Daikin Perfera 3,5 kW" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kategoria</FormLabel>
-                      <FormControl>
-                        <Input placeholder="np. Klimatyzacja split" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="installedAt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Data instalacji</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="warrantyUntil"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Gwarancja do (opcjonalnie)</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+
               <FormField
                 control={form.control}
-                name="warrantyActive"
+                name="deviceId"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                    <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={(v) => field.onChange(v === true)} />
-                    </FormControl>
-                    <FormLabel className="!mt-0 cursor-pointer font-normal">Gwarancja aktywna</FormLabel>
+                  <FormItem>
+                    <FormLabel>Urządzenie</FormLabel>
+                    {clientId && devices.length === 0 && !devicesQuery.isLoading ? (
+                      <p className="text-sm text-muted-foreground">
+                        Ten klient nie ma urządzeń — dodaj urządzenie najpierw.
+                      </p>
+                    ) : (
+                      <Select value={field.value} onValueChange={field.onChange} disabled={!clientId}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={clientId ? "Wybierz urządzenie" : "Najpierw wybierz klienta"} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {devices.map((d) => (
+                            <SelectItem key={d.id} value={d.id}>
+                              {d.model} ({d.category})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="technicianId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Technik</FormLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Wybierz technika" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {technicians.map((t) => (
+                          <SelectItem key={t.id} value={t.id}>
+                            {t.firstName} {t.lastName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="croNumber"
+                  name="scheduledAt"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Numer CRO (opcjonalnie)</FormLabel>
+                      <FormLabel>Data i godzina</FormLabel>
                       <FormControl>
-                        <Input placeholder="CRO/2026/PL/…" {...field} />
+                        <Input type="datetime-local" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -272,38 +253,49 @@ export function AddDeviceDialog({
                 />
                 <FormField
                   control={form.control}
-                  name="refrigerant"
+                  name="plannedType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Czynnik (opcjonalnie)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="np. R32 · 1,15 kg" {...field} />
-                      </FormControl>
+                      <FormLabel>Typ czynności</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {serviceTypes.map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+
               <FormField
                 control={form.control}
-                name="location"
+                name="note"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lokalizacja (opcjonalnie)</FormLabel>
+                    <FormLabel>Notatka dla technika (opcjonalnie)</FormLabel>
                     <FormControl>
-                      <Input placeholder="np. Salon, parter" {...field} />
+                      <Textarea rows={3} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Dodawanie…" : "Dodaj urządzenie"}
+                {form.formState.isSubmitting ? "Planowanie…" : "Zaplanuj wizytę"}
               </Button>
             </form>
           </Form>
-        )}
-          </>
         )}
       </DialogContent>
     </Dialog>
