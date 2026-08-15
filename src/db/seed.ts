@@ -1,5 +1,8 @@
 import { db } from "./client";
 import { tenants, users, clients, devices, serviceEntries, visits, documents } from "./schema";
+import { auth } from "@/lib/auth";
+
+const DEMO_PASSWORD = "KlimaTechDemo2026!";
 
 async function seed() {
   const [tenant] = await db
@@ -20,45 +23,45 @@ async function seed() {
     return;
   }
 
-  const [ownerUser] = await db
-    .insert(users)
-    .values({
-      id: "seed-owner-1",
-      name: "Właściciel",
+  const ownerSignUp = await auth.api.signUpEmail({
+    body: {
       email: "wlasciciel@klimatech-demo.pl",
+      password: DEMO_PASSWORD,
+      name: "Właściciel KlimaTech",
       role: "owner",
       tenantId: tenant.id,
       firstName: "Właściciel",
       lastName: "KlimaTech",
-    })
-    .returning();
+    },
+  });
+  const ownerUser = { id: ownerSignUp.user.id };
 
-  const [technicianUser] = await db
-    .insert(users)
-    .values({
-      id: "seed-technician-1",
-      name: "Marek Nowak",
+  const technicianSignUp = await auth.api.signUpEmail({
+    body: {
       email: "marek.nowak@klimatech-demo.pl",
+      password: DEMO_PASSWORD,
+      name: "Marek Nowak",
       role: "technician",
       tenantId: tenant.id,
       firstName: "Marek",
       lastName: "Nowak",
       certNumber: "F-GAZ/PL/2019/88213",
-    })
-    .returning();
+    },
+  });
+  const technicianUser = { id: technicianSignUp.user.id };
 
-  const [clientUser] = await db
-    .insert(users)
-    .values({
-      id: "seed-client-1",
-      name: "Anna Kowalska",
+  const clientSignUp = await auth.api.signUpEmail({
+    body: {
       email: "anna.kowalska@klimatech-demo.pl",
+      password: DEMO_PASSWORD,
+      name: "Anna Kowalska",
       role: "client",
       tenantId: tenant.id,
       firstName: "Anna",
       lastName: "Kowalska",
-    })
-    .returning();
+    },
+  });
+  const clientUser = { id: clientSignUp.user.id };
 
   const [client] = await db
     .insert(clients)
@@ -267,6 +270,7 @@ async function seed() {
   });
 
   console.log(`Seeded tenant "${tenant.slug}" (${tenant.id}) with owner/technician/5 clients.`);
+  console.log(`Demo login password for all three role accounts: ${DEMO_PASSWORD}`);
 }
 
 seed()
