@@ -12,7 +12,7 @@
 
 <br>
 
-[🚀 **OTWÓRZ LIVE DEMO**](https://klimatech-repo.vercel.app)
+[🚀 **ZOBACZ LIVE DEMO — 3 ROLE**](https://klimatech-repo.vercel.app/logowanie)
 
 </div>
 
@@ -103,13 +103,31 @@ Mają dostęp do historii wykonanej usługi
 
 ---
 
-## 🚀 Live Demo
+# 🚀 Live Demo
 
-Aplikację możesz zobaczyć tutaj:
+Aplikacja posiada przygotowane **trzy konta demonstracyjne**, dzięki którym można zobaczyć cały system z perspektywy klienta, serwisanta oraz właściciela firmy.
 
-### 👉 [klimatech-repo.vercel.app](https://klimatech-repo.vercel.app)
+### 👉 [OTWÓRZ DEMO](https://klimatech-repo.vercel.app/logowanie)
 
-Projekt działa online i pozwala zobaczyć sposób działania platformy z perspektywy różnych użytkowników.
+Nie trzeba tworzyć konta ani konfigurować firmy.
+
+Wystarczy zalogować się kolejno na poniższe konta:
+
+| Rola              | E-mail                            | Hasło                |
+| ----------------- | --------------------------------- | -------------------- |
+| 📊 **Właściciel** | `wlasciciel@klimatech-demo.pl`    | `KlimaTechDemo2026!` |
+| 🔧 **Serwisant**  | `marek.nowak@klimatech-demo.pl`   | `KlimaTechDemo2026!` |
+| 👤 **Klient**     | `anna.kowalska@klimatech-demo.pl` | `KlimaTechDemo2026!` |
+
+### Co warto zobaczyć?
+
+**📊 Zaloguj się jako właściciel**, aby zobaczyć zarządzanie firmą, klientami, zespołem, zleceniami i statystykami.
+
+**🔧 Zaloguj się jako serwisant**, aby zobaczyć harmonogram, przypisane zlecenia, dane klientów i proces realizacji pracy.
+
+**👤 Zaloguj się jako klient**, aby zobaczyć zgłoszenia, wizyty, urządzenia i historię kontaktu z serwisem.
+
+> Konta oraz dane znajdujące się w wersji demonstracyjnej służą wyłącznie do prezentacji działania systemu.
 
 ---
 
@@ -263,6 +281,6 @@ Możliwe jest dostosowanie:
 
 **Klient. Serwisant. Właściciel. Jeden system.**
 
-[🚀 Live Demo](https://klimatech-repo.vercel.app) • [💻 GitHub](https://github.com/Wojtekkurwaboss/klimatech-serwis)
+[🚀 Live Demo](https://klimatech-repo.vercel.app/logowanie) • [💻 GitHub](https://github.com/Wojtekkurwaboss/klimatech-serwis)
 
 </div>
