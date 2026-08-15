@@ -1,86 +1,85 @@
-<div align="center">
+<p align="center">
+  <img src="public/klimatech-preview.jpg" alt="KLIMATECH — platforma SaaS dla firm HVAC" width="100%" />
+</p>
 
-<img src="public/readme-banner.svg" alt="KLIMATECH — platforma SaaS dla firm HVAC" width="100%" />
+<div align="center">
 
 # ❄️ KLIMATECH
 
-### Platforma do zarządzania firmą serwisującą klimatyzację i pompy ciepła
+### Platforma SaaS do zarządzania firmą HVAC
 
-**Klient • Serwisant • Właściciel — jeden system**
+**Panel klienta • Panel serwisanta • Panel właściciela**
 
 <br>
 
 [🚀 **OTWÓRZ LIVE DEMO**](https://klimatech-repo.vercel.app)
 
-<br>
-
 </div>
 
 ---
 
-## 💡 O projekcie
+## 💡 Czym jest KLIMATECH?
 
-**KLIMATECH** to demonstracyjna platforma SaaS stworzona z myślą o firmach zajmujących się montażem i serwisem **klimatyzacji oraz pomp ciepła**.
+**KLIMATECH** to demonstracyjna aplikacja SaaS stworzona dla firm zajmujących się montażem i serwisem klimatyzacji oraz pomp ciepła.
 
-Celem projektu jest zebranie najważniejszych procesów firmy serwisowej w jednym systemie — od zgłoszenia klienta, przez pracę serwisanta, aż po zarządzanie całą firmą przez właściciela.
+System łączy w jednym miejscu trzy najważniejsze strony całego procesu:
 
-System posiada **trzy oddzielne role użytkowników**, z których każda otrzymuje własny panel i funkcje dopasowane do swojej pracy.
+* 👤 **Klienta**
+* 🔧 **Serwisanta**
+* 📊 **Właściciela firmy**
 
----
-
-# 👤 Panel Klienta
-
-Klient otrzymuje własne miejsce do obsługi urządzeń i kontaktu z firmą.
-
-### Najważniejsze możliwości:
-
-* zgłaszanie awarii i problemów,
-* podgląd aktualnych zgłoszeń,
-* śledzenie statusu realizacji,
-* historia serwisowa urządzeń,
-* informacje o zaplanowanych wizytach,
-* dane dotyczące posiadanych urządzeń,
-* komunikacja z firmą serwisową.
+Celem projektu jest uproszczenie obsługi zgłoszeń, planowania wizyt, realizacji zleceń oraz zarządzania firmą serwisową.
 
 ---
 
-# 🔧 Panel Serwisanta
+## 👤 Panel Klienta
 
-Serwisant otrzymuje przejrzysty panel swojej codziennej pracy.
+Klient otrzymuje własny panel, w którym może:
 
-### Najważniejsze możliwości:
-
-* lista przypisanych zleceń,
-* dzienny harmonogram wizyt,
-* dane klienta i lokalizacja,
-* informacje o urządzeniu,
-* historia wcześniejszych prac,
-* checklisty wykonywanych czynności,
-* notatki serwisowe,
-* zmiana statusu realizacji zlecenia,
-* dokumentowanie wykonanej pracy.
+* zgłaszać awarie i problemy,
+* sprawdzać status zgłoszenia,
+* przeglądać zaplanowane wizyty,
+* śledzić historię serwisową urządzeń,
+* przeglądać swoje urządzenia,
+* komunikować się z firmą serwisową.
 
 ---
 
-# 📊 Panel Właściciela
+## 🔧 Panel Serwisanta
 
-Panel właściciela pozwala zarządzać działalnością firmy z jednego miejsca.
+Serwisant otrzymuje panel dopasowany do codziennej pracy w terenie.
 
-### Najważniejsze możliwości:
+Może między innymi:
 
-* zarządzanie klientami,
-* zarządzanie serwisantami,
-* zarządzanie urządzeniami,
-* tworzenie i przydzielanie zleceń,
-* planowanie wizyt,
-* kontrolowanie statusów realizacji,
-* podgląd aktywności zespołu,
-* historia wykonanych usług,
-* statystyki i dane operacyjne firmy.
+* przeglądać przypisane zlecenia,
+* sprawdzać harmonogram dnia,
+* otwierać szczegóły wizyty,
+* przeglądać dane klienta,
+* sprawdzać historię urządzenia,
+* prowadzić checklistę wykonanych prac,
+* dodawać notatki,
+* aktualizować status realizacji.
 
 ---
 
-## 🔄 Jak wygląda cały proces?
+## 📊 Panel Właściciela
+
+Właściciel firmy otrzymuje centralny panel zarządzania.
+
+Może:
+
+* zarządzać klientami,
+* zarządzać serwisantami,
+* zarządzać urządzeniami,
+* tworzyć i przypisywać zlecenia,
+* planować wizyty,
+* kontrolować statusy zleceń,
+* monitorować aktywność zespołu,
+* analizować dane i statystyki firmy.
+
+---
+
+## 🔄 Jak działa system?
 
 ```text
 KLIENT
@@ -99,123 +98,89 @@ Aktualizuje status i dokumentację
    ↓
 KLIENT + WŁAŚCICIEL
    ↓
-Widzą historię wykonanej usługi
-```
-
-Wszystkie role działają w ramach jednego systemu.
-
----
-
-# 🚀 Live Demo
-
-Projekt jest dostępny online:
-
-### 👉 https://klimatech-repo.vercel.app
-
-Możesz przejść przez aplikację i zobaczyć sposób działania systemu z perspektywy różnych użytkowników.
-
----
-
-# 🏢 Dla kogo powstał KLIMATECH?
-
-Projekt został zaprojektowany przede wszystkim dla:
-
-* firm instalujących klimatyzację,
-* firm serwisujących klimatyzację,
-* instalatorów pomp ciepła,
-* firm HVAC,
-* lokalnych firm posiadających kilku serwisantów,
-* przedsiębiorstw chcących odejść od Excela, kartek i rozproszonych systemów.
-
----
-
-# 🎯 Problem
-
-W wielu małych i średnich firmach serwisowych informacje są rozdzielone pomiędzy:
-
-* Excel,
-* kalendarz,
-* wiadomości,
-* telefony,
-* dokumenty papierowe,
-* notatki pracowników.
-
-Powoduje to problemy z kontrolowaniem zleceń, historią klientów i organizacją pracy serwisantów.
-
-### KLIMATECH pokazuje, jak można połączyć te procesy w jednej aplikacji.
-
----
-
-# 🧩 Architektura
-
-Platforma została zaprojektowana jako aplikacja **multi-user / multi-role**, w której różne typy użytkowników korzystają z tego samego systemu, ale mają dostęp do innych funkcji.
-
-```text
-                 ┌─────────────────┐
-                 │    KLIMATECH    │
-                 └────────┬────────┘
-                          │
-           ┌──────────────┼──────────────┐
-           │              │              │
-           ▼              ▼              ▼
-
-      👤 KLIENT      🔧 SERWISANT    📊 WŁAŚCICIEL
-
-      Zgłoszenia      Zlecenia       Zarządzanie
-      Urządzenia      Harmonogram    Klienci
-      Historia        Realizacja     Zespół
-      Wizyty          Dokumentacja   Statystyki
+Mają dostęp do historii wykonanej usługi
 ```
 
 ---
 
-# 🛠️ Technologie
+## 🚀 Live Demo
 
-Projekt wykorzystuje nowoczesny stack aplikacji webowych:
+Aplikację możesz zobaczyć tutaj:
+
+### 👉 [klimatech-repo.vercel.app](https://klimatech-repo.vercel.app)
+
+Projekt działa online i pozwala zobaczyć sposób działania platformy z perspektywy różnych użytkowników.
+
+---
+
+## 🎯 Dla kogo?
+
+KLIMATECH został zaprojektowany z myślą o:
+
+* firmach HVAC,
+* firmach montujących klimatyzację,
+* serwisach klimatyzacji,
+* instalatorach pomp ciepła,
+* firmach posiadających kilku serwisantów,
+* przedsiębiorstwach chcących uporządkować obsługę klientów i zleceń.
+
+---
+
+## 🧩 Trzy role — jeden system
+
+| Rola              | Główne funkcje                                        |
+| ----------------- | ----------------------------------------------------- |
+| 👤 **Klient**     | Zgłoszenia, wizyty, urządzenia, historia, komunikacja |
+| 🔧 **Serwisant**  | Harmonogram, zlecenia, realizacja, dokumentacja       |
+| 📊 **Właściciel** | Klienci, zespół, zlecenia, statystyki, zarządzanie    |
+
+---
+
+## 🛠️ Technologie
 
 ### Frontend
 
-* **React 19**
-* **TypeScript**
-* **TanStack Start**
-* **TanStack Router**
-* **TanStack Query**
-* **Tailwind CSS**
-* **Radix UI / shadcn-style components**
-* **Lucide Icons**
-* **Recharts**
+* React
+* TypeScript
+* TanStack Start
+* TanStack Router
+* TanStack Query
+* Tailwind CSS
+* Radix UI
+* Lucide Icons
+* Recharts
 
-### Backend / dane
+### Backend i dane
 
-* **TanStack Start — server functions / SSR**
-* **Drizzle ORM**
-* **Neon PostgreSQL**
-* **Better Auth**
-* **Zod**
-* **Resend**
+* TanStack Start
+* Drizzle ORM
+* Neon PostgreSQL
+* Better Auth
+* Zod
+* Resend
 
 ### Deployment
 
-* **Vercel**
-* **GitHub**
+* Vercel
+* GitHub
 
 ---
 
-# 🗄️ Dane i bezpieczeństwo
+## 🔐 Bezpieczeństwo
 
-Poufne dane konfiguracyjne nie są przechowywane bezpośrednio w kodzie aplikacji.
+Poufne dane aplikacji są przechowywane w zmiennych środowiskowych.
 
-Konfiguracja środowiska wykorzystuje zmienne środowiskowe, między innymi:
+Przykład:
 
 ```env
 DATABASE_URL=
 ```
 
-Pliki `.env` są wykluczone z repozytorium przez `.gitignore`.
+Pliki `.env` oraz `.env*` są wykluczone z repozytorium przez `.gitignore`.
 
 ---
 
-# 💻 Uruchomienie lokalne
+## 💻 Uruchomienie lokalne
 
 ### 1. Sklonuj repozytorium
 
@@ -223,7 +188,7 @@ Pliki `.env` są wykluczone z repozytorium przez `.gitignore`.
 git clone https://github.com/Wojtekkurwaboss/klimatech-serwis.git
 ```
 
-### 2. Przejdź do katalogu
+### 2. Przejdź do projektu
 
 ```bash
 cd klimatech-serwis
@@ -235,15 +200,15 @@ cd klimatech-serwis
 npm install
 ```
 
-### 4. Skonfiguruj zmienne środowiskowe
+### 4. Dodaj zmienne środowiskowe
 
-Utwórz lokalny plik:
+Utwórz:
 
 ```text
 .env.local
 ```
 
-i dodaj wymagane zmienne środowiskowe.
+i dodaj wymagane dane konfiguracyjne.
 
 ### 5. Uruchom aplikację
 
@@ -253,49 +218,50 @@ npm run dev
 
 ---
 
-# 📌 Status projektu
+## 📌 Status projektu
 
-**KLIMATECH jest projektem demonstracyjnym / portfolio**, pokazującym koncepcję kompletnego systemu SaaS dla branży HVAC.
+KLIMATECH jest obecnie **projektem demonstracyjnym i portfolio** pokazującym koncepcję rozbudowanej platformy SaaS dla branży HVAC.
 
-Projekt może być dalej rozwijany między innymi o:
+Projekt może zostać dalej rozwinięty między innymi o:
 
-* płatności i abonamenty,
-* automatyczne przypomnienia,
-* faktury,
-* zaawansowane raporty,
-* zarządzanie magazynem części,
-* automatyzacje e-mail / SMS,
-* integracje z zewnętrznymi systemami,
-* aplikację mobilną dla serwisantów.
+* 💳 abonamenty i płatności,
+* 🔔 automatyczne przypomnienia,
+* 📱 aplikację mobilną dla serwisantów,
+* 📦 magazyn części,
+* 📄 faktury i dokumenty,
+* 📲 powiadomienia SMS,
+* 📧 automatyzacje e-mail,
+* 📈 bardziej rozbudowane raporty,
+* 🔌 integracje z innymi systemami.
 
 ---
 
-# 🤝 Wdrożenie dla firmy
+## 🤝 Wdrożenie dla firmy
 
-System może stanowić bazę pod rozwiązanie dostosowane do konkretnej firmy serwisowej.
+Platforma może być dalej dostosowywana pod potrzeby konkretnej firmy HVAC.
 
-Możliwe jest między innymi dostosowanie:
+Możliwe jest dostosowanie:
 
 * brandingu,
-* funkcji,
-* struktury użytkowników,
+* funkcjonalności,
+* paneli użytkowników,
 * procesów firmy,
-* formularzy,
-* paneli,
 * automatyzacji,
-* bazy klientów.
+* formularzy,
+* raportów,
+* struktury klientów i pracowników.
 
-### Kontakt
+### 📧 Kontakt
 
-📧 **[wojtekzieba.w@gmail.com](mailto:wojtekzieba.w@gmail.com)**
+**[wojtekzieba.w@gmail.com](mailto:wojtekzieba.w@gmail.com)**
 
 ---
 
 <div align="center">
 
-### ❄️ KLIMATECH
+## ❄️ KLIMATECH
 
-**Nowoczesne zarządzanie firmą HVAC w jednym systemie.**
+**Klient. Serwisant. Właściciel. Jeden system.**
 
 [🚀 Live Demo](https://klimatech-repo.vercel.app) • [💻 GitHub](https://github.com/Wojtekkurwaboss/klimatech-serwis)
 
