@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/klimatech-preview.jpg" alt="KLIMATECH — platforma SaaS dla firm HVAC" width="100%" />
+  <img src="public/klimatech-github-social-preview.jpg" alt="KLIMATECH — platforma SaaS dla firm HVAC" width="100%" />
 </p>
 
 <div align="center">
