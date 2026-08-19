@@ -105,29 +105,21 @@ Mają dostęp do historii wykonanej usługi
 
 # 🚀 Live Demo
 
-Aplikacja posiada przygotowane **trzy konta demonstracyjne**, dzięki którym można zobaczyć cały system z perspektywy klienta, serwisanta oraz właściciela firmy.
+Aplikacja posiada przygotowane **trzy tryby demonstracyjne**, dzięki którym można zobaczyć cały system z perspektywy klienta, serwisanta oraz właściciela firmy.
 
 ### 👉 [OTWÓRZ DEMO](https://klimatech-repo.vercel.app/logowanie)
 
-Nie trzeba tworzyć konta ani konfigurować firmy.
+Nie trzeba tworzyć konta, wpisywać adresu e-mail ani hasła.
 
-Wystarczy zalogować się kolejno na poniższe konta:
+Po wejściu na stronę logowania wystarczy **kliknąć wybraną rolę**, a system automatycznie otworzy odpowiednie konto demonstracyjne:
 
-| Rola              | E-mail                            | Hasło                |
-| ----------------- | --------------------------------- | -------------------- |
-| 📊 **Właściciel** | `wlasciciel@klimatech-demo.pl`    | `KlimaTechDemo2026!` |
-| 🔧 **Serwisant**  | `marek.nowak@klimatech-demo.pl`   | `KlimaTechDemo2026!` |
-| 👤 **Klient**     | `anna.kowalska@klimatech-demo.pl` | `KlimaTechDemo2026!` |
+* 📊 **Właściciel** — zarządzanie firmą, klientami, zespołem, zleceniami i statystykami,
+* 🔧 **Serwisant** — harmonogram, przypisane zlecenia, dane klientów i realizacja pracy,
+* 👤 **Klient** — zgłoszenia, wizyty, urządzenia i historia kontaktu z serwisem.
 
-### Co warto zobaczyć?
+Możesz przełączać się między rolami i zobaczyć cały przepływ działania systemu bez rejestracji i konfiguracji.
 
-**📊 Zaloguj się jako właściciel**, aby zobaczyć zarządzanie firmą, klientami, zespołem, zleceniami i statystykami.
-
-**🔧 Zaloguj się jako serwisant**, aby zobaczyć harmonogram, przypisane zlecenia, dane klientów i proces realizacji pracy.
-
-**👤 Zaloguj się jako klient**, aby zobaczyć zgłoszenia, wizyty, urządzenia i historię kontaktu z serwisem.
-
-> Konta oraz dane znajdujące się w wersji demonstracyjnej służą wyłącznie do prezentacji działania systemu.
+> Wszystkie konta i dane w wersji demonstracyjnej służą wyłącznie do prezentacji działania platformy.
 
 ---
 
