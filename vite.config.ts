@@ -22,4 +22,15 @@ export default defineConfig({
     // defined in module" at runtime. Bundling to a single file sidesteps it.
     inlineDynamicImports: true,
   },
+  vite: {
+    optimizeDeps: {
+      // The client-side dep scan (esbuild) crawls into this server-only
+      // package's createStartHandler.js, which does `import("#tanstack-*-entry")` —
+      // subpath imports that only resolve when the TanStack Start Vite plugin
+      // handles them, not during a raw esbuild pre-bundle. That failure hangs
+      // the whole optimize batch (react/react-dom included) forever in dev.
+      // Excluding it keeps the client scan from ever crossing into it.
+      exclude: ["@tanstack/start-server-core"],
+    },
+  },
 });

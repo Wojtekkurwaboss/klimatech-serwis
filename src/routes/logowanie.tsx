@@ -17,6 +17,13 @@ const schema = z.object({
   password: z.string().min(1, "Podaj hasło"),
 });
 
+const DEMO_PASSWORD = "KlimaTechDemo2026!";
+const DEMO_ACCOUNTS: { label: string; email: string }[] = [
+  { label: "Właściciel", email: "wlasciciel@klimatech-demo.pl" },
+  { label: "Technik", email: "marek.nowak@klimatech-demo.pl" },
+  { label: "Klient", email: "anna.kowalska@klimatech-demo.pl" },
+];
+
 export const Route = createFileRoute("/logowanie")({
   component: LogowaniePage,
 });
@@ -24,13 +31,13 @@ export const Route = createFileRoute("/logowanie")({
 function LogowaniePage() {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [demoLoadingEmail, setDemoLoadingEmail] = useState<string | null>(null);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
   });
 
-  async function onSubmit(values: z.infer<typeof schema>) {
-    setServerError(null);
+  async function signInAndRedirect(values: { email: string; password: string }) {
     const { data, error } = await authClient.signIn.email(values);
     if (error || !data) {
       setServerError("Nieprawidłowy e-mail lub hasło.");
@@ -38,6 +45,18 @@ function LogowaniePage() {
     }
     const role = (data.user as unknown as { role: Role }).role;
     navigate({ to: roleHomeRoute(role) });
+  }
+
+  async function onSubmit(values: z.infer<typeof schema>) {
+    setServerError(null);
+    await signInAndRedirect(values);
+  }
+
+  async function onDemoLogin(email: string) {
+    setServerError(null);
+    setDemoLoadingEmail(email);
+    await signInAndRedirect({ email, password: DEMO_PASSWORD });
+    setDemoLoadingEmail(null);
   }
 
   return (
@@ -93,6 +112,26 @@ function LogowaniePage() {
             <Link to="/rejestracja" className="underline">
               Załóż konto firmy
             </Link>
+          </div>
+
+          <div className="mt-6 border-t pt-4">
+            <p className="mb-3 text-center text-sm text-muted-foreground">
+              Chcesz tylko zobaczyć demo? Wejdź bez hasła:
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {DEMO_ACCOUNTS.map((acc) => (
+                <Button
+                  key={acc.email}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={demoLoadingEmail !== null}
+                  onClick={() => onDemoLogin(acc.email)}
+                >
+                  {demoLoadingEmail === acc.email ? "…" : acc.label}
+                </Button>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
