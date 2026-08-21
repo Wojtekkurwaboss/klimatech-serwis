@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
-    "db:seed": "dotenv -e .env.local -- tsx src/db/seed.ts"
+    "db:seed": "dotenv -e .env.local -- tsx src/db/seed.ts",
+    "seed:tenant": "dotenv -e .env.local -- tsx scripts/seed-tenant.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

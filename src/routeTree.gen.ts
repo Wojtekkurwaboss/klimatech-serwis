@@ -16,6 +16,7 @@ import { Route as ResetHaslaRouteImport } from './routes/reset-hasla'
 import { Route as WlascicielRouteImport } from './routes/wlasciciel'
 import { Route as WylogujRouteImport } from './routes/wyloguj'
 import { Route as ZapomnialemHaslaRouteImport } from './routes/zapomnialem-hasla'
+import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as TechnikIndexRouteImport } from './routes/technik.index'
 import { Route as TechnikVisitIdRouteImport } from './routes/technik.$visitId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
@@ -55,6 +56,11 @@ const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
   path: '/zapomnialem-hasla',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoSlugRoute = DemoSlugRouteImport.update({
+  id: '/demo/$slug',
+  path: '/demo/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TechnikIndexRoute = TechnikIndexRouteImport.update({
   id: '/technik/',
   path: '/technik/',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/wlasciciel': typeof WlascicielRoute
   '/wyloguj': typeof WylogujRoute
   '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/wlasciciel': typeof WlascicielRoute
   '/wyloguj': typeof WylogujRoute
   '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik': typeof TechnikIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/wlasciciel': typeof WlascicielRoute
   '/wyloguj': typeof WylogujRoute
   '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/technik/$visitId': typeof TechnikVisitIdRoute
   '/technik/': typeof TechnikIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/wlasciciel'
     | '/wyloguj'
     | '/zapomnialem-hasla'
+    | '/demo/$slug'
     | '/technik/$visitId'
     | '/technik/'
     | '/api/auth/$'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/wlasciciel'
     | '/wyloguj'
     | '/zapomnialem-hasla'
+    | '/demo/$slug'
     | '/technik/$visitId'
     | '/technik'
     | '/api/auth/$'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/wlasciciel'
     | '/wyloguj'
     | '/zapomnialem-hasla'
+    | '/demo/$slug'
     | '/technik/$visitId'
     | '/technik/'
     | '/api/auth/$'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   WlascicielRoute: typeof WlascicielRoute
   WylogujRoute: typeof WylogujRoute
   ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
+  DemoSlugRoute: typeof DemoSlugRoute
   TechnikVisitIdRoute: typeof TechnikVisitIdRoute
   TechnikIndexRoute: typeof TechnikIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -211,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ZapomnialemHaslaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/$slug': {
+      id: '/demo/$slug'
+      path: '/demo/$slug'
+      fullPath: '/demo/$slug'
+      preLoaderRoute: typeof DemoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technik/': {
       id: '/technik/'
       path: '/technik'
@@ -243,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   WlascicielRoute: WlascicielRoute,
   WylogujRoute: WylogujRoute,
   ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
+  DemoSlugRoute: DemoSlugRoute,
   TechnikVisitIdRoute: TechnikVisitIdRoute,
   TechnikIndexRoute: TechnikIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
