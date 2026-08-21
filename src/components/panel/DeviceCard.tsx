@@ -38,9 +38,11 @@ export function DeviceCard({ device }: { device: DeviceInfo }) {
           <p className="text-sm font-semibold text-foreground">
             Gwarancja {device.warrantyActive ? "aktywna" : "nieaktywna"}
           </p>
-          <p className="text-sm text-muted-foreground">
-            ważna do {formatPlDate(device.warrantyUntil)}
-          </p>
+          {device.warrantyUntil && (
+            <p className="text-sm text-muted-foreground">
+              ważna do {formatPlDate(device.warrantyUntil)}
+            </p>
+          )}
         </div>
       </footer>
     </article>
