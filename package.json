@@ -13,7 +13,8 @@
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:seed": "dotenv -e .env.local -- tsx src/db/seed.ts",
-    "seed:tenant": "dotenv -e .env.local -- tsx scripts/seed-tenant.ts"
+    "seed:tenant": "dotenv -e .env.local -- tsx scripts/seed-tenant.ts",
+    "provision:production": "dotenv -e .env.local -- tsx scripts/provision-production.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
