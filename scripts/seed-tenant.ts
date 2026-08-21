@@ -24,7 +24,18 @@ type Payload = {
   phone?: string;
   email?: string;
   logoUrl?: string;
+  city?: string;
 };
+
+/** Podmienia miasto w adresie demo-klienta ("ul. Sosnowa 8, Piaseczno" ->
+ * "ul. Sosnowa 8, Gorlice"), zostawiając ulicę bez zmian — tak demo działa
+ * lokalnie dla pitchowanej firmy bez wymyślania fałszywych, konkretnych
+ * klientów (tych SOMI nie zna). Brak `city` w payloadzie -> adres bez zmian. */
+function localizeAddress(address: string, city?: string): string {
+  if (!city) return address;
+  const idx = address.lastIndexOf(",");
+  return idx === -1 ? `${address}, ${city}` : `${address.slice(0, idx)}, ${city}`;
+}
 
 function slugify(name: string): string {
   return name
@@ -152,7 +163,7 @@ async function main() {
       .values({
         tenantId: tenant.id,
         userId: rowUser.id,
-        address: row.address,
+        address: localizeAddress(row.address, payload.city),
         clientNumber: `KL-DEMO-${1000 + seq}`,
       })
       .returning();
